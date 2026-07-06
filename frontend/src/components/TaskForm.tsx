@@ -88,7 +88,7 @@ export default function TaskForm({ task, onClose, onSuccess }: TaskFormProps) {
       {/* Modal */}
       <div className="relative w-full max-w-lg bg-slate-900 border border-slate-700/50 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden">
         {/* Header gradient */}
-        <div className="h-1 bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500" />
+        <div className="h-1 bg-gradient-to-r from-sky-500 via-cyan-500 to-cyan-500" />
 
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
@@ -123,7 +123,7 @@ export default function TaskForm({ task, onClose, onSuccess }: TaskFormProps) {
                 value={form.title}
                 onChange={handleChange}
                 placeholder="Contoh: Implementasi fitur login"
-                className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/30 transition-all"
+                className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500/60 focus:ring-1 focus:ring-sky-500/30 transition-all"
               />
             </div>
 
@@ -138,7 +138,7 @@ export default function TaskForm({ task, onClose, onSuccess }: TaskFormProps) {
                 onChange={handleChange}
                 placeholder="Deskripsi detail task (opsional)"
                 rows={3}
-                className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/30 transition-all resize-none"
+                className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500/60 focus:ring-1 focus:ring-sky-500/30 transition-all resize-none"
               />
             </div>
 
@@ -152,7 +152,7 @@ export default function TaskForm({ task, onClose, onSuccess }: TaskFormProps) {
                   name="status"
                   value={form.status}
                   onChange={handleChange}
-                  className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/30 transition-all"
+                  className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500/60 focus:ring-1 focus:ring-sky-500/30 transition-all"
                 >
                   <option value="todo">📋 Todo</option>
                   <option value="in_progress">⚡ In Progress</option>
@@ -169,7 +169,7 @@ export default function TaskForm({ task, onClose, onSuccess }: TaskFormProps) {
                   name="deadline"
                   value={form.deadline}
                   onChange={handleChange}
-                  className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/30 transition-all [color-scheme:dark]"
+                  className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500/60 focus:ring-1 focus:ring-sky-500/30 transition-all [color-scheme:dark]"
                 />
               </div>
             </div>
@@ -183,7 +183,7 @@ export default function TaskForm({ task, onClose, onSuccess }: TaskFormProps) {
                 name="assignee_id"
                 value={form.assignee_id}
                 onChange={handleChange}
-                className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/30 transition-all"
+                className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500/60 focus:ring-1 focus:ring-sky-500/30 transition-all"
               >
                 <option value="">-- Pilih Assignee --</option>
                 {users.map((u) => (
@@ -206,7 +206,7 @@ export default function TaskForm({ task, onClose, onSuccess }: TaskFormProps) {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 hover:from-indigo-600 hover:to-violet-600 text-white text-sm font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-indigo-500/20"
+                className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white text-sm font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-sky-500/20"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

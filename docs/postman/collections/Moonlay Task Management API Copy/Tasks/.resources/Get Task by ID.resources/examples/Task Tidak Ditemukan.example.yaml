@@ -1,0 +1,16 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/tasks/{{task_id}}"
+  method: GET
+  headers:
+    Authorization: Bearer {{token}}
+response:
+  statusCode: 404
+  statusText: Not Found
+  body:
+    type: text
+    content: |-
+      {
+        "error": "Task tidak ditemukan"
+      }
+order: 2000

@@ -40,12 +40,14 @@ export default function ChatbotWidget() {
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, botMsg]);
-    } catch {
+    } catch (error) {
+      const e = error as { response?: { data?: { error?: string } } };
+      const errorMessage = e?.response?.data?.error ?? '❌ Maaf, terjadi kesalahan pada server.';
       setMessages((prev) => [
         ...prev,
         {
           role: 'bot',
-          content: '❌ Maaf, terjadi kesalahan. Pastikan GEMINI_API_KEY sudah dikonfigurasi di backend.',
+          content: `❌ ${errorMessage}`,
           timestamp: new Date(),
         },
       ]);
@@ -67,10 +69,10 @@ export default function ChatbotWidget() {
       {isOpen && (
         <div className="w-80 sm:w-96 h-[480px] bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-300">
           {/* Header */}
-          <div className="h-1 bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 flex-shrink-0" />
+          <div className="h-1 bg-gradient-to-r from-sky-500 via-cyan-500 to-cyan-500 flex-shrink-0" />
           <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-800/80 flex-shrink-0">
             <div className="relative">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-sm">
+              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-sky-500 to-cyan-600 flex items-center justify-center text-white text-sm">
                 🤖
               </div>
               <div className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 border-2 border-slate-900" />
@@ -96,7 +98,7 @@ export default function ChatbotWidget() {
                 <div
                   className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-line ${
                     msg.role === 'user'
-                      ? 'bg-gradient-to-r from-indigo-500 to-violet-500 text-white rounded-br-sm'
+                      ? 'bg-gradient-to-r from-sky-500 to-cyan-500 text-white rounded-br-sm'
                       : 'bg-slate-800/80 text-slate-200 rounded-bl-sm border border-slate-700/30'
                   }`}
                 >
@@ -130,12 +132,12 @@ export default function ChatbotWidget() {
                 onKeyDown={handleKeyDown}
                 placeholder="Tanya tentang task..."
                 disabled={loading}
-                className="flex-1 bg-slate-800/60 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-all disabled:opacity-50"
+                className="flex-1 bg-slate-800/60 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500/50 focus:ring-1 focus:ring-sky-500/30 transition-all disabled:opacity-50"
               />
               <button
                 onClick={sendMessage}
                 disabled={!input.trim() || loading}
-                className="p-2 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-500 text-white disabled:opacity-40 disabled:cursor-not-allowed hover:from-indigo-600 hover:to-violet-600 transition-all shadow-lg shadow-indigo-500/20"
+                className="p-2 rounded-xl bg-gradient-to-br from-sky-500 to-cyan-500 text-white disabled:opacity-40 disabled:cursor-not-allowed hover:from-sky-600 hover:to-cyan-600 transition-all shadow-lg shadow-sky-500/20"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -151,7 +153,7 @@ export default function ChatbotWidget() {
       <button
         onClick={() => setIsOpen((prev) => !prev)}
         id="chatbot-toggle"
-        className="relative h-14 w-14 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-105 transition-all duration-200 flex items-center justify-center"
+        className="relative h-14 w-14 rounded-full bg-gradient-to-br from-sky-500 to-cyan-600 text-white shadow-xl shadow-sky-500/30 hover:shadow-sky-500/50 hover:scale-105 transition-all duration-200 flex items-center justify-center"
       >
         {isOpen ? (
           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

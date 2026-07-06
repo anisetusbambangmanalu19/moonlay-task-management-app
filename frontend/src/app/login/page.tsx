@@ -43,14 +43,14 @@ export default function LoginPage() {
     <div className="min-h-screen gradient-bg flex items-center justify-center p-4">
       {/* Background decorations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -left-40 w-80 h-80 bg-indigo-600/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -left-40 w-80 h-80 bg-sky-600/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-cyan-600/10 rounded-full blur-3xl" />
       </div>
 
       <div className="w-full max-w-md relative z-10">
         {/* Logo / Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 mb-4 shadow-xl shadow-indigo-500/30">
+          <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-sky-500 to-cyan-600 mb-4 shadow-xl shadow-sky-500/30">
             <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
             </svg>
@@ -61,7 +61,7 @@ export default function LoginPage() {
 
         {/* Login Card */}
         <div className="glass-card rounded-2xl p-8 shadow-2xl">
-          <div className="h-0.5 -mx-8 -mt-8 mb-8 bg-gradient-to-r from-indigo-500/0 via-indigo-500 to-violet-500/0 rounded-t-2xl" />
+          <div className="h-0.5 -mx-8 -mt-8 mb-8 bg-gradient-to-r from-sky-500/0 via-sky-500 to-cyan-500/0 rounded-t-2xl" />
 
           {error && (
             <div className="mb-5 p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-3">
@@ -91,7 +91,7 @@ export default function LoginPage() {
                   onChange={(e) => { setEmail(e.target.value); setError(''); }}
                   placeholder="admin@moonlay.com"
                   required
-                  className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/70 focus:ring-1 focus:ring-indigo-500/30 transition-all"
+                  className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500/70 focus:ring-1 focus:ring-sky-500/30 transition-all"
                 />
               </div>
             </div>
@@ -114,7 +114,7 @@ export default function LoginPage() {
                   onChange={(e) => { setPassword(e.target.value); setError(''); }}
                   placeholder="••••••••"
                   required
-                  className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl pl-10 pr-12 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/70 focus:ring-1 focus:ring-indigo-500/30 transition-all"
+                  className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl pl-10 pr-12 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500/70 focus:ring-1 focus:ring-sky-500/30 transition-all"
                 />
                 <button
                   type="button"
@@ -140,7 +140,7 @@ export default function LoginPage() {
               id="login-submit"
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 hover:from-indigo-600 hover:to-violet-600 text-white font-semibold transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5"
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white font-semibold transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 hover:-translate-y-0.5"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -170,7 +170,7 @@ export default function LoginPage() {
                   onClick={() => { setEmail(cred.email); setPassword(cred.pass); setError(''); }}
                   className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-700/50 transition-colors"
                 >
-                  <span className="text-xs text-indigo-400">{cred.email}</span>
+                  <span className="text-xs text-sky-400">{cred.email}</span>
                   <span className="text-xs text-slate-600 ml-2">/ {cred.pass}</span>
                 </button>
               ))}

@@ -1,0 +1,28 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/auth/login"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: text
+    content: |-
+      {
+        "email": "admin@moonlay.com",
+        "password": "admin123"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImFkbWluQG1vb25sYXkuY29tIiwic3ViIjoiMSIsImV4cCI6MTc4MzQzOTY2MCwiaWF0IjoxNzgzMzUzMjYwfQ.YrwFvSHQLWu1h3acXp46_w5VPHtJCQVmal8DX-7QEc8",
+          "user": {
+              "email": "admin@moonlay.com",
+              "id": 1,
+              "name": "Admin"
+          }
+      }
+order: 1000

@@ -1,0 +1,14 @@
+name: Moonlay Task API Env Copy
+values:
+  - key: base_url
+    value: 'http://localhost:8080/api'
+    description: Base URL backend API
+  - key: token
+    value: ''
+    description: JWT Token — diisi otomatis setelah request Login berhasil
+  - key: task_id
+    value: '1'
+    description: 'ID task untuk endpoint yang membutuhkan :id'
+  - key: user_id
+    value: ''
+    description: ID user login — diisi otomatis setelah Login

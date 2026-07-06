@@ -1,0 +1,8 @@
+$kind: http-request
+description: Ambil detail satu task berdasarkan ID.
+url: "{{base_url}}/tasks/{{task_id}}"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+examples: ./.resources/Get Task by ID.resources/examples
+order: 2000

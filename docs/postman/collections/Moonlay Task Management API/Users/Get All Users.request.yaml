@@ -1,0 +1,8 @@
+$kind: http-request
+description: Ambil daftar semua user. Digunakan untuk dropdown assignee di frontend.
+url: "{{base_url}}/users"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+examples: ./.resources/Get All Users.resources/examples
+order: 1000

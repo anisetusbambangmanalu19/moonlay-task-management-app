@@ -1,170 +1,120 @@
 # Moonlay Task Management App
 
-Aplikasi manajemen task sederhana dengan fitur CRUD task, autentikasi JWT, dan AI Chatbot berbasis RAG (Retrieval-Augmented Generation) — dibuat sebagai technical test untuk posisi **Fullstack Developer Intern @ PT Moonlay Technologies**.
+Aplikasi manajemen task sederhana dengan fitur CRUD task, autentikasi JWT, dan AI Chatbot berbasis RAG (Retrieval-Augmented Generation). Proyek ini dikembangkan sebagai technical test untuk posisi **Fullstack Developer Intern @ PT Moonlay Technologies**.
+
+UI didesain secara profesional menyesuaikan branding Moonlay (Cyan/Sky Blue & Dark Mode).
 
 ---
 
-## Tech Stack
+## 🛠 Tech Stack
 
 | Layer | Teknologi |
 |---|---|
-| **Frontend** | Next.js 15 (App Router) + TypeScript + Tailwind CSS |
+| **Frontend** | Next.js 15 (App Router) + TypeScript + Tailwind CSS v4 |
 | **Backend** | Golang 1.23 + Gin Framework |
 | **ORM/Query** | GORM (CRUD standar) + Raw SQL via `db.Raw()` (chatbot) |
-| **Database** | PostgreSQL |
+| **Database** | PostgreSQL (Docker) |
 | **Auth** | JWT (access token, expiry 24 jam) + bcrypt |
-| **Chatbot** | RAG: PostgreSQL → Prompt → Gemini 1.5 Flash |
+| **Chatbot** | RAG: PostgreSQL → Custom Prompt → Gemini 1.5 Flash (via REST HTTP) |
 
 ---
 
-## Struktur Folder
+## 📂 Struktur Folder Utama
 
 ```
 moonlay-task-management-app/
 ├── backend/
-│   ├── cmd/api/main.go           # Entry point
+│   ├── cmd/api/main.go           # Entry point aplikasi backend
 │   ├── internal/
-│   │   ├── config/               # DB connection, env loader
-│   │   ├── models/               # Struct User, Task
-│   │   ├── repository/           # Query layer (GORM + raw SQL)
-│   │   ├── handlers/             # HTTP handler per resource
-│   │   ├── middleware/           # JWT auth middleware
-│   │   └── routes/               # Route registration
+│   │   ├── config/               # Koneksi DB dan loader environment
+│   │   ├── models/               # Struct GORM untuk User dan Task
+│   │   ├── repository/           # Query layer (GORM + Raw SQL)
+│   │   ├── handlers/             # HTTP Handlers (Auth, Task, Chatbot)
+│   │   ├── middleware/           # Middleware JWT untuk proteksi route
+│   │   └── routes/               # Registrasi Endpoint API
 │   ├── migrations/
-│   │   ├── 001_init.sql          # Schema migration
-│   │   └── seed/main.go          # Seed script (bcrypt hash at runtime)
-│   ├── .env.example
-│   └── go.mod
-├── frontend/
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── login/page.tsx
-│   │   │   ├── tasks/page.tsx
-│   │   │   └── layout.tsx
-│   │   ├── components/
-│   │   │   ├── TaskCard.tsx
-│   │   │   ├── TaskForm.tsx
-│   │   │   ├── ChatbotWidget.tsx
-│   │   │   └── StatusBadge.tsx
-│   │   ├── lib/
-│   │   │   ├── api.ts            # Axios + interceptors
-│   │   │   └── auth.ts           # Token helpers
-│   │   └── types/index.ts
-│   └── .env.local
-└── docs/
-    ├── Moonlay_TaskApp.postman_collection.json
-    ├── Moonlay_TaskApp.postman_environment.json
-    └── ERD.md
+│   │   ├── 001_init.sql          # Skema database (PostgreSQL)
+│   │   └── seed/main.go          # Skrip seeder data awal
+│   └── .env.example
+└── frontend/
+    ├── src/
+    │   ├── app/                  # Next.js Pages (Login, Tasks)
+    │   ├── components/           # UI Components (Card, Form, Chatbot)
+    │   ├── lib/                  # Helpers (Axios interceptor, Token)
+    │   └── types/                # TypeScript Interfaces
+    └── .env.local
 ```
 
 ---
 
-## Prasyarat
+## 🚀 Panduan Setup & Instalasi
 
-| Tool | Versi Minimum | Link |
-|---|---|---|
-| **Go** | 1.23+ | https://go.dev/dl |
-| **Node.js** | 18+ (LTS) | https://nodejs.org |
-| **PostgreSQL** | 14+ | https://postgresql.org/download |
+### 1. Prasyarat Sistem
+Pastikan Anda sudah menginstal:
+- **Go** (minimal v1.23)
+- **Node.js** (minimal v20+)
+- **PostgreSQL** (bisa via Docker atau lokal)
 
----
+### 2. Setup Database (PostgreSQL)
 
-## Setup Database
-
-### 1. Buat database baru
-
-Lewat Navicat atau psql:
-```sql
-CREATE DATABASE moonlay_task_db;
+Jika menggunakan Docker (opsional):
+```bash
+docker run --name postgres-moonlay -e POSTGRES_PASSWORD=postgrespassword -p 5434:5432 -d postgres
 ```
 
-### 2. Jalankan migration schema
+Buat database `moonlay_task_db`. Kemudian jalankan script SQL yang ada di `backend/migrations/001_init.sql` melalui tool seperti pgAdmin, DBeaver, atau Navicat.
 
-Buka `backend/migrations/001_init.sql` di Navicat Query Tool (pilih database `moonlay_task_db`) dan **Run**.
+### 3. Setup Backend (Golang)
 
-Schema yang dibuat:
-- ENUM `task_status` (`todo`, `in_progress`, `done`)
-- Tabel `users` dan `tasks`
-- Index pada `assignee_id`, `status`, `deadline`
-- Trigger auto-update `updated_at`
-
----
-
-## Setup Backend
-
-### 1. Konfigurasi environment
-
+1. Masuk ke folder backend dan copy environment:
 ```bash
 cd backend
 copy .env.example .env
 ```
 
-Edit `.env` dengan nilai yang sesuai:
-
+2. Konfigurasikan `.env` sesuai dengan credentials database Anda:
 ```env
-PORT=8080
-
 DB_HOST=localhost
-DB_PORT=5432
+DB_PORT=5434
 DB_USER=postgres
-DB_PASSWORD=password_postgres_kamu
+DB_PASSWORD=postgrespassword
 DB_NAME=moonlay_task_db
 DB_SSLMODE=disable
 
-JWT_SECRET=minimal_32_karakter_random_string_yang_aman
-JWT_EXPIRY_HOURS=24
-
-GEMINI_API_KEY=isi_dari_aistudio_google_com
+# Gunakan Gemini API Key format terbaru dari Google AI Studio (berawalan AQ. atau AIza)
+GEMINI_API_KEY=AQ.Ab8RN6KL6Hc4ppmBXNIs...
 ```
 
-> **Mendapatkan Gemini API Key**: Buka [aistudio.google.com](https://aistudio.google.com) → Get API Key → Create API Key (gratis)
-
-### 2. Seed database
-
-Jalankan dari folder `backend/`:
+3. Jalankan Seeder untuk mengisi data awal:
 ```bash
 go run migrations/seed/main.go
 ```
 
-Script ini akan insert 4 user dengan password yang di-hash bcrypt secara otomatis. Aman untuk dijalankan berulang kali (idempotent via `FirstOrCreate`).
-
-### 3. Jalankan backend
-
+4. Jalankan server Backend:
 ```bash
 go run cmd/api/main.go
 ```
+*Backend berjalan di port `8080`.*
 
-Backend berjalan di `http://localhost:8080`
+### 4. Setup Frontend (Next.js)
 
----
-
-## Setup Frontend
-
-### 1. Konfigurasi environment
-
-File `.env.local` sudah ada dengan nilai default:
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8080/api
-```
-
-### 2. Install dependencies
-
+1. Masuk ke folder frontend dan install dependencies:
 ```bash
 cd frontend
 npm install
 ```
 
-### 3. Jalankan frontend
-
+2. Jalankan development server:
 ```bash
 npm run dev
 ```
-
-Frontend berjalan di `http://localhost:3000`
+*Frontend dapat diakses di `http://localhost:3000`.*
 
 ---
 
-## Kredensial Login (untuk Testing)
+## 🔑 Kredensial Uji Coba (Login)
+
+Skrip seeder akan secara otomatis membuat 4 user berikut (Password: **nama123**):
 
 | Nama | Email | Password |
 |---|---|---|
@@ -173,133 +123,65 @@ Frontend berjalan di `http://localhost:3000`
 | Bambang | bambang@moonlay.com | bambang123 |
 | Manalu | manalu@moonlay.com | manalu123 |
 
-> Password disimpan sebagai bcrypt hash di database — tidak ada plaintext.
+> *Catatan: Seluruh password disimpan dalam bentuk **bcrypt hash** di database.*
 
 ---
 
-## API Endpoints
+## 🤖 Integrasi AI Chatbot (RAG)
+
+Aplikasi ini memiliki fitur Chatbot untuk memonitor tugas. Fitur ini dibuat tanpa external framework yang berat, murni menggunakan pendekatan **Retrieval-Augmented Generation (RAG)** sederhana di backend:
+
+1. **Pengumpulan Konteks (Raw SQL)**: 
+   Sesuai dengan instruksi teknis, endpoint chatbot menjalankan kueri **Raw SQL** ke database PostgreSQL. Raw SQL digunakan untuk me-retrieve semua data task beserta nama assignee-nya secara langsung.
+2. **Injeksi Prompt**: 
+   Data JSON dari database diinjeksikan sebagai *context* ke dalam prompt pengguna.
+3. **Panggilan HTTP REST API ke Gemini**: 
+   Dikarenakan format API key Google terbaru (`AQ.`) saat ini memiliki isu kompatibilitas dengan Google SDK Go yang lama, panggilan AI dilakukan secara manual menggunakan **net/http** ke URL `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`. Key dikirim dengan header `x-goog-api-key`.
+4. **Model Gemini 1.5 Flash**: 
+   Digunakan karena cepat, hemat resource, dan memiliki free-tier quota yang tinggi (15 RPM).
+
+**Contoh Pertanyaan Chatbot:**
+- *"Berapa jumlah task yang sudah selesai?"*
+- *"Tampilkan semua task yang statusnya belum dikerjakan"*
+- *"Tugas apa saja yang deadlinenya paling dekat?"*
+- *"Siapa assignee dari task [judul task]?"*
+
+---
+
+## 📡 API Endpoints
 
 | Method | Path | Auth | Deskripsi |
 |---|---|---|---|
-| `POST` | `/api/auth/login` | ❌ | Login, return JWT token |
-| `GET` | `/api/users` | ✅ | List semua user |
-| `GET` | `/api/tasks` | ✅ | List semua task + assignee |
-| `GET` | `/api/tasks/:id` | ✅ | Detail satu task |
-| `POST` | `/api/tasks` | ✅ | Buat task baru |
-| `PUT` | `/api/tasks/:id` | ✅ | Update semua field task |
-| `PATCH` | `/api/tasks/:id/status` | ✅ | Update status saja |
-| `DELETE` | `/api/tasks/:id` | ✅ | Hapus task |
-| `POST` | `/api/chatbot` | ✅ | Tanya AI tentang task |
-
-Semua error response: `{"error": "pesan error"}` dengan HTTP status code yang sesuai.
+| `POST` | `/api/auth/login` | ❌ | Login, mengembalikan JWT Token |
+| `GET` | `/api/users` | ✅ | Mengambil daftar semua user (untuk dropdown Assignee) |
+| `GET` | `/api/tasks` | ✅ | Mengambil daftar seluruh task |
+| `POST` | `/api/tasks` | ✅ | Membuat task baru |
+| `PUT` | `/api/tasks/:id` | ✅ | Memperbarui keseluruhan data task |
+| `PATCH` | `/api/tasks/:id/status` | ✅ | Memperbarui status task saja |
+| `DELETE` | `/api/tasks/:id` | ✅ | Menghapus task berdasarkan ID |
+| `POST` | `/api/chatbot` | ✅ | Chat dengan AI (RAG Flow) |
 
 ---
 
-## Dokumentasi API (Postman)
+## 🚀 Testing API dengan Postman
 
-1. Import `docs/Moonlay_TaskApp.postman_collection.json` ke Postman
-2. Import `docs/Moonlay_TaskApp.postman_environment.json` ke Postman
-3. Pilih environment **"Moonlay Task API Env"**
-4. Jalankan request **"Login"** — token JWT akan otomatis tersimpan ke variable `{{token}}`
-5. Semua request lain langsung bisa dipakai
+Anda dapat menguji seluruh endpoint API menggunakan Postman. Semua request, autentikasi otomatis, dan variabel sudah dikonfigurasi.
 
----
-
-## Cara Kerja Chatbot (RAG)
-
-Chatbot menggunakan pendekatan **Retrieval-Augmented Generation (RAG)** sederhana:
-
-### Alur
-
-```
-User kirim pertanyaan
-       ↓
-Backend query PostgreSQL (raw SQL)
-  → SELECT semua task + nama assignee
-       ↓
-Serialize hasil query ke JSON
-       ↓
-Susun prompt ke Gemini:
-  [instruksi sistem]
-  [data task sebagai context]
-  [pertanyaan user]
-       ↓
-Gemini 1.5 Flash generate jawaban
-  (temperature rendah = 0.3 untuk jawaban faktual)
-       ↓
-Return jawaban ke user
-```
-
-### Kenapa Raw SQL untuk Chatbot?
-
-Query chatbot menggunakan `db.Raw()` (raw SQL) bukan GORM standar, sesuai spesifikasi teknis. Ini memungkinkan:
-- JOIN yang fleksibel (task + user dalam satu query)
-- Format output yang bisa disesuaikan untuk context LLM
-- Tidak bergantung pada struct GORM yang bisa berubah
-
-### Contoh Pertanyaan yang Bisa Dijawab
-
-- "Berapa jumlah task yang sudah selesai?"
-- "Tampilkan semua task yang statusnya belum dikerjakan"
-- "Tugas apa saja yang deadlinenya paling dekat?"
-- "Siapa assignee dari task [judul task]?"
-- "Task apa saja yang dikerjakan oleh Anisetus?"
-
-### Library / Model
-
-- **Library**: `github.com/google/generative-ai-go` (SDK resmi Gemini dari Google)
-- **Model**: `gemini-1.5-flash` (cepat, hemat token, cocok untuk Q&A berbasis data)
-- **API Key**: Dapatkan gratis di [aistudio.google.com](https://aistudio.google.com)
+1. Buka aplikasi **Postman**.
+2. Klik tombol **Import** (di kiri atas).
+3. Import file berikut dari folder `docs/` di dalam project:
+   - `Moonlay_TaskApp.postman_collection.json`
+   - `Moonlay_TaskApp.postman_environment.json`
+4. Di pojok kanan atas Postman, pastikan Anda mengubah environment dropdown dari *No Environment* menjadi **Moonlay Task API Env**.
+5. Buka collection `Moonlay_TaskApp` dan jalankan request **Auth > Login**.
+   > *Setelah login sukses, token JWT akan otomatis tersimpan ke variabel environment `{{token}}`.*
+6. Anda sekarang bisa menjalankan request lain (seperti Get Tasks, Create Task, Chatbot) tanpa perlu memasukkan token secara manual!
 
 ---
 
-## ERD
-
-Lihat `docs/ERD.md` untuk diagram entitas dan relasi dalam format dbdiagram.io (DBML).
-
-Relasi utama:
-- 1 `user` → banyak `task` (sebagai `assignee_id`)
-- 1 `user` → banyak `task` (sebagai `created_by`, opsional — audit trail)
+## 🎨 UI/UX Design
+UI frontend dirancang dengan **Tailwind CSS**, mengadopsi tema **Dark Mode** modern dengan skema warna aksen Cyan/Sky Blue (`#0095c8`) yang selaras dengan identitas **PT Moonlay Technologies**. Terdapat efek *glassmorphism*, gradient atraktif, dan animasi fluid untuk transisi.
 
 ---
 
-## Asumsi yang Diambil
-
-1. **Deadline menggunakan format datetime** (bukan hanya tanggal), supaya chatbot bisa menjawab pertanyaan seperti "task yang deadlinenya hari ini" dengan perbandingan waktu yang tepat.
-
-2. **Tidak ada role/permission berbeda antar user** — semua user yang login punya akses yang sama (bisa CRUD semua task). Tidak ada konsep "hanya bisa edit task milik sendiri".
-
-3. **Assignee wajib diisi saat membuat task**, tidak boleh kosong. Field `created_by` bersifat opsional dan diisi otomatis dari JWT token user yang sedang login.
-
-4. **Token disimpan di localStorage** (bukan cookie), karena lebih sederhana untuk SPA dan tidak memerlukan konfigurasi server-side cookie handling.
-
-5. **Seed dilakukan via Go script** (bukan SQL INSERT langsung) supaya bcrypt hash dibuat secara programatik di runtime — tidak perlu pre-compute hash secara manual.
-
-6. **CORS dikonfigurasi** untuk hanya mengizinkan origin `http://localhost:3000` (frontend development server).
-
-7. **Chatbot menggunakan model Gemini 1.5 Flash** — dipilih karena gratis, cepat, dan cukup untuk use case Q&A berbasis data terstruktur.
-
-8. **Tidak ada fitur registrasi user** — semua user di-hardcode via seed script, sesuai spesifikasi.
-
----
-
-## Commit History (Recommended)
-
-Urutan commit yang disarankan untuk menunjukkan proses berpikir runtut:
-
-```
-feat: initial project setup (go.mod, next.js scaffold)
-feat: database schema migration (001_init.sql)
-feat: user model, repository, seed script
-feat: jwt auth middleware and login endpoint
-feat: task CRUD endpoints (repository + handlers + routes)
-feat: chatbot endpoint with RAG flow (raw SQL + Gemini API)
-feat: frontend login page with JWT storage
-feat: frontend tasks page with CRUD modals
-feat: chatbot widget component (floating UI)
-docs: postman collection, ERD, README
-```
-
----
-
-*Dibuat oleh Anisetus Bambang Manalu — Technical Test PT Moonlay Technologies, Juli 2026*
+*Dibuat oleh **Anisetus Bambang Manalu** — Technical Test PT Moonlay Technologies, Juli 2026*

@@ -1,0 +1,29 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/tasks"
+  method: GET
+  headers:
+    Authorization: Bearer {{token}}
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "data": [
+          {
+            "id": 1,
+            "title": "Implementasi fitur login",
+            "description": "Buat halaman login dengan JWT",
+            "status": "in_progress",
+            "deadline": "2026-07-10T10:00:00Z",
+            "assignee_id": 2,
+            "created_by": 1,
+            "created_at": "2026-07-06T12:00:00Z",
+            "updated_at": "2026-07-06T12:00:00Z",
+            "assignee": { "id": 2, "name": "Anisetus", "email": "anisetus@moonlay.com" }
+          }
+        ]
+      }
+order: 1000

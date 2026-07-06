@@ -123,7 +123,7 @@ export default function TasksPage() {
       <header className="sticky top-0 z-30 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg">
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-sky-500 to-cyan-600 flex items-center justify-center shadow-lg">
               <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
               </svg>
@@ -137,7 +137,7 @@ export default function TasksPage() {
           <div className="flex items-center gap-3">
             {currentUser && (
               <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700/30">
-                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center text-white text-xs font-bold">
+                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-sky-500 to-cyan-500 flex items-center justify-center text-white text-xs font-bold">
                   {currentUser.name?.charAt(0).toUpperCase()}
                 </div>
                 <span className="text-sm text-slate-300">{currentUser.name}</span>
@@ -191,7 +191,7 @@ export default function TasksPage() {
               placeholder="Cari task atau assignee..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-all"
+              className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500/50 focus:ring-1 focus:ring-sky-500/30 transition-all"
             />
           </div>
 
@@ -203,7 +203,7 @@ export default function TasksPage() {
                 onClick={() => setFilterStatus(status)}
                 className={`px-3 py-2 rounded-xl text-xs font-medium transition-all whitespace-nowrap ${
                   filterStatus === status
-                    ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20'
+                    ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20'
                     : 'bg-slate-800/60 border border-slate-700/50 text-slate-400 hover:text-white hover:bg-slate-700/60'
                 }`}
               >
@@ -216,7 +216,7 @@ export default function TasksPage() {
           <button
             id="add-task-btn"
             onClick={() => { setEditTask(null); setShowForm(true); }}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 hover:from-indigo-600 hover:to-violet-600 text-white text-sm font-semibold transition-all shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 whitespace-nowrap"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white text-sm font-semibold transition-all shadow-lg shadow-sky-500/20 hover:shadow-sky-500/30 whitespace-nowrap"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -229,7 +229,7 @@ export default function TasksPage() {
         {loading ? (
           <div className="flex items-center justify-center py-24">
             <div className="flex flex-col items-center gap-4">
-              <svg className="w-10 h-10 text-indigo-500 animate-spin" fill="none" viewBox="0 0 24 24">
+              <svg className="w-10 h-10 text-sky-500 animate-spin" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
@@ -252,7 +252,7 @@ export default function TasksPage() {
             {!searchQuery && filterStatus === 'all' && (
               <button
                 onClick={() => { setEditTask(null); setShowForm(true); }}
-                className="px-4 py-2 rounded-xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 text-sm font-medium hover:bg-indigo-500/30 transition-all"
+                className="px-4 py-2 rounded-xl bg-sky-500/20 border border-sky-500/30 text-sky-400 text-sm font-medium hover:bg-sky-500/30 transition-all"
               >
                 + Tambah Task Pertama
               </button>

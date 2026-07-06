@@ -1,0 +1,23 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/chatbot"
+  method: POST
+  headers:
+    Authorization: Bearer {{token}}
+    Content-Type: application/json
+  body:
+    type: text
+    content: |-
+      {
+        "question": "Berapa jumlah task yang sudah selesai?"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  body:
+    type: text
+    content: |-
+      {
+        "answer": "Berdasarkan data yang ada, terdapat 3 task yang sudah selesai (status 'done'), yaitu: Setup database, Implementasi login, dan Konfigurasi JWT."
+      }
+order: 1000
