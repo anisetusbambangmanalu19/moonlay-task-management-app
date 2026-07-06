@@ -1,0 +1,336 @@
+{
+  "info": {
+    "name": "Moonlay Task Management API",
+    "_postman_id": "moonlay-task-api-2026",
+    "description": "API collection untuk Task Management App — PT Moonlay Technologies Technical Test.\n\nCara pakai:\n1. Import collection ini ke Postman\n2. Import environment 'Moonlay Task API Env'\n3. Jalankan request 'Login' terlebih dahulu — token akan otomatis tersimpan ke variable {{token}}\n4. Semua endpoint lain langsung bisa dipakai",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Auto-set token setelah login sukses",
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "    pm.environment.set('token', res.token);",
+                  "    pm.environment.set('user_id', res.user.id);",
+                  "    console.log('✅ Token tersimpan otomatis');",
+                  "}",
+                  "",
+                  "pm.test('Status 200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('Response memiliki token', () => pm.expect(res).to.have.property('token'));",
+                  "pm.test('Response memiliki user', () => pm.expect(res).to.have.property('user'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@moonlay.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login dengan email dan password. Token JWT akan otomatis disimpan ke variable {{token}} via test script."
+          },
+          "response": [
+            {
+              "name": "Login Sukses",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"user\": {\n    \"id\": 1,\n    \"name\": \"Admin\",\n    \"email\": \"admin@moonlay.com\"\n  }\n}"
+            },
+            {
+              "name": "Login Gagal - Email/Password Salah",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"error\": \"Email atau password salah\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            },
+            "description": "Ambil daftar semua user. Digunakan untuk dropdown assignee di frontend."
+          },
+          "response": [
+            {
+              "name": "Sukses",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"data\": [\n    { \"id\": 1, \"name\": \"Admin\", \"email\": \"admin@moonlay.com\", \"created_at\": \"2026-07-01T00:00:00Z\" },\n    { \"id\": 2, \"name\": \"Budi Santoso\", \"email\": \"budi@moonlay.com\", \"created_at\": \"2026-07-01T00:00:00Z\" }\n  ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Get All Tasks",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', () => pm.response.to.have.status(200));",
+                  "const res = pm.response.json();",
+                  "pm.test('Response memiliki array data', () => pm.expect(res.data).to.be.an('array'));",
+                  "if (res.data && res.data.length > 0) {",
+                  "    pm.environment.set('task_id', res.data[0].id);",
+                  "    console.log('task_id tersimpan:', res.data[0].id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["tasks"]
+            },
+            "description": "Ambil semua task beserta nama assignee."
+          },
+          "response": [
+            {
+              "name": "Sukses",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"title\": \"Implementasi fitur login\",\n      \"description\": \"Buat halaman login dengan JWT\",\n      \"status\": \"in_progress\",\n      \"deadline\": \"2026-07-10T10:00:00Z\",\n      \"assignee_id\": 2,\n      \"created_by\": 1,\n      \"created_at\": \"2026-07-06T12:00:00Z\",\n      \"updated_at\": \"2026-07-06T12:00:00Z\",\n      \"assignee\": { \"id\": 2, \"name\": \"Budi Santoso\", \"email\": \"budi@moonlay.com\" }\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Task by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/tasks/{{task_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["tasks", "{{task_id}}"]
+            },
+            "description": "Ambil detail satu task berdasarkan ID."
+          },
+          "response": [
+            {
+              "name": "Sukses",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"data\": {\n    \"id\": 1,\n    \"title\": \"Implementasi fitur login\",\n    \"status\": \"in_progress\",\n    \"deadline\": \"2026-07-10T10:00:00Z\",\n    \"assignee\": { \"id\": 2, \"name\": \"Budi Santoso\" }\n  }\n}"
+            },
+            {
+              "name": "Task Tidak Ditemukan",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"error\": \"Task tidak ditemukan\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Task",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+                  "const res = pm.response.json();",
+                  "if (res.data) {",
+                  "    pm.environment.set('task_id', res.data.id);",
+                  "    console.log('task_id baru:', res.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Setup database PostgreSQL\",\n  \"description\": \"Buat tabel users dan tasks sesuai schema yang ditentukan\",\n  \"status\": \"todo\",\n  \"deadline\": \"2026-07-10T10:00:00Z\",\n  \"assignee_id\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["tasks"]
+            },
+            "description": "Buat task baru. Field wajib: title, deadline, assignee_id."
+          },
+          "response": [
+            {
+              "name": "Sukses",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Task berhasil dibuat\",\n  \"data\": {\n    \"id\": 5,\n    \"title\": \"Setup database PostgreSQL\",\n    \"status\": \"todo\",\n    \"deadline\": \"2026-07-10T10:00:00Z\",\n    \"assignee\": { \"id\": 2, \"name\": \"Budi Santoso\" }\n  }\n}"
+            },
+            {
+              "name": "Validasi Error",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"error\": \"Assignee tidak ditemukan\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Task (Full)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Setup database PostgreSQL (Updated)\",\n  \"description\": \"Update deskripsi task\",\n  \"status\": \"in_progress\",\n  \"deadline\": \"2026-07-12T18:00:00Z\",\n  \"assignee_id\": 3\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/tasks/{{task_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["tasks", "{{task_id}}"]
+            },
+            "description": "Update semua field task sekaligus."
+          },
+          "response": [
+            {
+              "name": "Sukses",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Task berhasil diupdate\",\n  \"data\": { \"id\": 5, \"title\": \"Setup database PostgreSQL (Updated)\", \"status\": \"in_progress\" }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Status Task",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"done\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/tasks/{{task_id}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["tasks", "{{task_id}}", "status"]
+            },
+            "description": "Update hanya status task. Pilihan: todo, in_progress, done."
+          },
+          "response": [
+            {
+              "name": "Sukses",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Status berhasil diupdate\"\n}"
+            },
+            {
+              "name": "Status Tidak Valid",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"error\": \"Status tidak valid. Pilihan: todo, in_progress, done\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Task",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/tasks/{{task_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["tasks", "{{task_id}}"]
+            },
+            "description": "Hapus task berdasarkan ID."
+          },
+          "response": [
+            {
+              "name": "Sukses",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Task berhasil dihapus\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Chatbot",
+      "item": [
+        {
+          "name": "Ask Chatbot",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"Berapa jumlah task yang sudah selesai?\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chatbot",
+              "host": ["{{base_url}}"],
+              "path": ["chatbot"]
+            },
+            "description": "Tanya chatbot seputar data task. Chatbot akan query database terlebih dahulu (RAG), lalu kirim ke Gemini AI.\n\nContoh pertanyaan:\n- Berapa jumlah task yang sudah selesai?\n- Tampilkan task yang belum dikerjakan\n- Siapa assignee dari task [judul]?\n- Task apa saja yang deadlinenya hari ini?"
+          },
+          "response": [
+            {
+              "name": "Sukses",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"answer\": \"Berdasarkan data yang ada, terdapat 3 task yang sudah selesai (status 'done'), yaitu: Setup database, Implementasi login, dan Konfigurasi JWT.\"\n}"
+            },
+            {
+              "name": "API Key Tidak Dikonfigurasi",
+              "status": "Internal Server Error",
+              "code": 500,
+              "body": "{\n  \"error\": \"Konfigurasi API chatbot tidak lengkap. Periksa GEMINI_API_KEY di .env\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
