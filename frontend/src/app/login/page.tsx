@@ -162,7 +162,7 @@ export default function LoginPage() {
             <div className="space-y-1">
               {[
                 { email: 'admin@moonlay.com', pass: 'admin123' },
-                { email: 'budi@moonlay.com', pass: 'budi123' },
+                { email: 'anisetus@moonlay.com', pass: 'anisetus123' },
               ].map((cred) => (
                 <button
                   key={cred.email}

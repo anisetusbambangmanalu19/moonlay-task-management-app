@@ -169,9 +169,9 @@ Frontend berjalan di `http://localhost:3000`
 | Nama | Email | Password |
 |---|---|---|
 | Admin | admin@moonlay.com | admin123 |
-| Budi Santoso | budi@moonlay.com | budi123 |
-| Siti Rahayu | siti@moonlay.com | siti123 |
-| Rangga Pratama | rangga@moonlay.com | rangga123 |
+| Anisetus | anisetus@moonlay.com | anisetus123 |
+| Bambang | bambang@moonlay.com | bambang123 |
+| Manalu | manalu@moonlay.com | manalu123 |
 
 > Password disimpan sebagai bcrypt hash di database — tidak ada plaintext.
 
@@ -243,7 +243,7 @@ Query chatbot menggunakan `db.Raw()` (raw SQL) bukan GORM standar, sesuai spesif
 - "Tampilkan semua task yang statusnya belum dikerjakan"
 - "Tugas apa saja yang deadlinenya paling dekat?"
 - "Siapa assignee dari task [judul task]?"
-- "Task apa saja yang dikerjakan oleh Budi?"
+- "Task apa saja yang dikerjakan oleh Anisetus?"
 
 ### Library / Model
 

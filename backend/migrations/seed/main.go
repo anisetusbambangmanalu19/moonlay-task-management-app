@@ -63,9 +63,9 @@ func main() {
 		Password string
 	}{
 		{"Admin", "admin@moonlay.com", "admin123"},
-		{"Budi Santoso", "budi@moonlay.com", "budi123"},
-		{"Siti Rahayu", "siti@moonlay.com", "siti123"},
-		{"Rangga Pratama", "rangga@moonlay.com", "rangga123"},
+		{"Anisetus", "anisetus@moonlay.com", "anisetus123"},
+		{"Bambang", "bambang@moonlay.com", "bambang123"},
+		{"Manalu", "manalu@moonlay.com", "manalu123"},
 	}
 
 	for _, su := range seedUsers {
@@ -89,9 +89,9 @@ func main() {
 	log.Println("\n🎉 Seed selesai!")
 	log.Println("Kredensial login yang tersedia:")
 	log.Println("  admin@moonlay.com    / admin123")
-	log.Println("  budi@moonlay.com     / budi123")
-	log.Println("  siti@moonlay.com     / siti123")
-	log.Println("  rangga@moonlay.com   / rangga123")
+	log.Println("  anisetus@moonlay.com / anisetus123")
+	log.Println("  bambang@moonlay.com  / bambang123")
+	log.Println("  manalu@moonlay.com   / manalu123")
 }
 
 func getEnv(key, fallback string) string {

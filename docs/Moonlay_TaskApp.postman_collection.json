@@ -84,7 +84,7 @@
               "name": "Sukses",
               "status": "OK",
               "code": 200,
-              "body": "{\n  \"data\": [\n    { \"id\": 1, \"name\": \"Admin\", \"email\": \"admin@moonlay.com\", \"created_at\": \"2026-07-01T00:00:00Z\" },\n    { \"id\": 2, \"name\": \"Budi Santoso\", \"email\": \"budi@moonlay.com\", \"created_at\": \"2026-07-01T00:00:00Z\" }\n  ]\n}"
+              "body": "{\n  \"data\": [\n    { \"id\": 1, \"name\": \"Admin\", \"email\": \"admin@moonlay.com\", \"created_at\": \"2026-07-01T00:00:00Z\" },\n    { \"id\": 2, \"name\": \"Anisetus\", \"email\": \"anisetus@moonlay.com\", \"created_at\": \"2026-07-01T00:00:00Z\" }\n  ]\n}"
             }
           ]
         }
@@ -127,7 +127,7 @@
               "name": "Sukses",
               "status": "OK",
               "code": 200,
-              "body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"title\": \"Implementasi fitur login\",\n      \"description\": \"Buat halaman login dengan JWT\",\n      \"status\": \"in_progress\",\n      \"deadline\": \"2026-07-10T10:00:00Z\",\n      \"assignee_id\": 2,\n      \"created_by\": 1,\n      \"created_at\": \"2026-07-06T12:00:00Z\",\n      \"updated_at\": \"2026-07-06T12:00:00Z\",\n      \"assignee\": { \"id\": 2, \"name\": \"Budi Santoso\", \"email\": \"budi@moonlay.com\" }\n    }\n  ]\n}"
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"title\": \"Implementasi fitur login\",\n      \"description\": \"Buat halaman login dengan JWT\",\n      \"status\": \"in_progress\",\n      \"deadline\": \"2026-07-10T10:00:00Z\",\n      \"assignee_id\": 2,\n      \"created_by\": 1,\n      \"created_at\": \"2026-07-06T12:00:00Z\",\n      \"updated_at\": \"2026-07-06T12:00:00Z\",\n      \"assignee\": { \"id\": 2, \"name\": \"Anisetus\", \"email\": \"anisetus@moonlay.com\" }\n    }\n  ]\n}"
             }
           ]
         },
@@ -148,7 +148,7 @@
               "name": "Sukses",
               "status": "OK",
               "code": 200,
-              "body": "{\n  \"data\": {\n    \"id\": 1,\n    \"title\": \"Implementasi fitur login\",\n    \"status\": \"in_progress\",\n    \"deadline\": \"2026-07-10T10:00:00Z\",\n    \"assignee\": { \"id\": 2, \"name\": \"Budi Santoso\" }\n  }\n}"
+              "body": "{\n  \"data\": {\n    \"id\": 1,\n    \"title\": \"Implementasi fitur login\",\n    \"status\": \"in_progress\",\n    \"deadline\": \"2026-07-10T10:00:00Z\",\n    \"assignee\": { \"id\": 2, \"name\": \"Anisetus\" }\n  }\n}"
             },
             {
               "name": "Task Tidak Ditemukan",
@@ -198,7 +198,7 @@
               "name": "Sukses",
               "status": "Created",
               "code": 201,
-              "body": "{\n  \"message\": \"Task berhasil dibuat\",\n  \"data\": {\n    \"id\": 5,\n    \"title\": \"Setup database PostgreSQL\",\n    \"status\": \"todo\",\n    \"deadline\": \"2026-07-10T10:00:00Z\",\n    \"assignee\": { \"id\": 2, \"name\": \"Budi Santoso\" }\n  }\n}"
+              "body": "{\n  \"message\": \"Task berhasil dibuat\",\n  \"data\": {\n    \"id\": 5,\n    \"title\": \"Setup database PostgreSQL\",\n    \"status\": \"todo\",\n    \"deadline\": \"2026-07-10T10:00:00Z\",\n    \"assignee\": { \"id\": 2, \"name\": \"Anisetus\" }\n  }\n}"
             },
             {
               "name": "Validasi Error",
