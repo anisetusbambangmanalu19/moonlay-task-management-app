@@ -11,19 +11,41 @@ response:
     type: text
     content: |-
       {
-        "data": [
-          {
-            "id": 1,
-            "title": "Implementasi fitur login",
-            "description": "Buat halaman login dengan JWT",
-            "status": "in_progress",
-            "deadline": "2026-07-10T10:00:00Z",
-            "assignee_id": 2,
-            "created_by": 1,
-            "created_at": "2026-07-06T12:00:00Z",
-            "updated_at": "2026-07-06T12:00:00Z",
-            "assignee": { "id": 2, "name": "Anisetus", "email": "anisetus@moonlay.com" }
-          }
-        ]
+          "data": [
+              {
+                  "id": 2,
+                  "title": "Implementasi CRUD TASK",
+                  "description": "membuat crud",
+                  "status": "todo",
+                  "deadline": "2026-07-16T08:33:00+07:00",
+                  "assignee_id": 2,
+                  "created_by": 1,
+                  "created_at": "2026-07-07T08:33:27.790717+07:00",
+                  "updated_at": "2026-07-07T08:33:27.790717+07:00",
+                  "assignee": {
+                      "id": 2,
+                      "name": "Anisetus",
+                      "email": "anisetus@moonlay.com",
+                      "created_at": "2026-07-06T20:39:26.913526+07:00"
+                  }
+              },
+              {
+                  "id": 1,
+                  "title": "Setup database PostgreSQL (Updated)",
+                  "description": "Update deskripsi task",
+                  "status": "in_progress",
+                  "deadline": "2026-07-13T01:00:00+07:00",
+                  "assignee_id": 3,
+                  "created_by": 1,
+                  "created_at": "2026-07-06T20:40:42.484564+07:00",
+                  "updated_at": "2026-07-07T08:45:43.189647+07:00",
+                  "assignee": {
+                      "id": 3,
+                      "name": "Bambang",
+                      "email": "bambang@moonlay.com",
+                      "created_at": "2026-07-06T20:39:27.012271+07:00"
+                  }
+              }
+          ]
       }
 order: 1000

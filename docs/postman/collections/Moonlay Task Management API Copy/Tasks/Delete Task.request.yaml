@@ -1,8 +1,0 @@
-$kind: http-request
-description: Hapus task berdasarkan ID.
-url: "{{base_url}}/tasks/{{task_id}}"
-method: DELETE
-headers:
-  Authorization: Bearer {{token}}
-examples: ./.resources/Delete Task.resources/examples
-order: 6000

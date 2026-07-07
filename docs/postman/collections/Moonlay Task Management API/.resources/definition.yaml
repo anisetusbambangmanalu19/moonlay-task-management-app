@@ -11,3 +11,4 @@ description: |-
 variables:
   base_url: ""
   token: ""
+  task_id: ""

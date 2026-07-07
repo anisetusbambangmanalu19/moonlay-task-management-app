@@ -14,7 +14,6 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  // Redirect if already logged in
   useEffect(() => {
     if (auth.isAuthenticated()) {
       router.push('/tasks');
@@ -39,127 +38,131 @@ export default function LoginPage() {
     }
   };
 
+  const setDemoCredentials = (email: string, password: string) => {
+    setEmail(email);
+    setPassword(password);
+    setError('');
+  };
+
   return (
-    <div className="min-h-screen gradient-bg flex items-center justify-center p-4">
-      {/* Background decorations */}
+    <div className="min-h-screen gradient-bg flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -left-40 w-80 h-80 bg-sky-600/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-cyan-600/10 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl" />
       </div>
 
       <div className="w-full max-w-md relative z-10">
-        {/* Logo / Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-sky-500 to-cyan-600 mb-4 shadow-xl shadow-sky-500/30">
-            <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+        {/* Header */}
+        <div className="text-center mb-10 animate-in">
+          <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-500 mb-4 shadow-xl shadow-blue-500/20">
+            <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-white mb-1">Moonlay Task Manager</h1>
-          <p className="text-slate-400 text-sm">Masuk untuk mengelola task tim Anda</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Moonlay Tasks</h1>
+          <p className="text-slate-400 text-sm">Kelola task tim Anda dengan efisien</p>
         </div>
 
         {/* Login Card */}
-        <div className="glass-card rounded-2xl p-8 shadow-2xl">
-          <div className="h-0.5 -mx-8 -mt-8 mb-8 bg-gradient-to-r from-sky-500/0 via-sky-500 to-cyan-500/0 rounded-t-2xl" />
+        <div className="glass-card rounded-3xl p-8 shadow-2xl animate-in" style={{ animationDelay: '0.1s' }}>
+          {/* Gradient divider */}
+          <div className="h-0.5 -mx-8 -mt-8 mb-8 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-3xl" />
 
+          {/* Error Message */}
           {error && (
-            <div className="mb-5 p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-3">
-              <svg className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <div className="mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-start gap-3 animate-in">
+              <svg className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
               </svg>
-              <p className="text-red-400 text-sm">{error}</p>
+              <p className="text-red-400 text-sm font-medium">{error}</p>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5" id="login-form">
-            {/* Email */}
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Email Input */}
             <div>
-              <label htmlFor="email" className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">
                 Email
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                  </svg>
-                </div>
+              <div className="relative group">
+                <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
                 <input
-                  id="email"
                   type="email"
                   value={email}
                   onChange={(e) => { setEmail(e.target.value); setError(''); }}
                   placeholder="admin@moonlay.com"
                   required
-                  className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500/70 focus:ring-1 focus:ring-sky-500/30 transition-all"
+                  className="w-full bg-slate-800/40 border border-slate-700/40 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:bg-slate-800/60 focus:ring-1 focus:ring-blue-500/20 transition-all"
                 />
               </div>
             </div>
 
-            {/* Password */}
+            {/* Password Input */}
             <div>
-              <label htmlFor="password" className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">
                 Password
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
+              <div className="relative group">
+                <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
                 <input
-                  id="password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => { setPassword(e.target.value); setError(''); }}
                   placeholder="••••••••"
                   required
-                  className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl pl-10 pr-12 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500/70 focus:ring-1 focus:ring-sky-500/30 transition-all"
+                  className="w-full bg-slate-800/40 border border-slate-700/40 rounded-xl pl-10 pr-12 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:bg-slate-800/60 focus:ring-1 focus:ring-blue-500/20 transition-all"
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 hover:text-slate-300 transition-colors"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors p-1"
                 >
                   {showPassword ? (
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M3.772 1.472a.75.75 0 011.06 0l15.656 15.656a.75.75 0 11-1.06 1.06l-15.656-15.656a.75.75 0 010-1.06z" />
+                      <path d="M8.5 10a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                      <path d="M12.168 13.5a2 2 0 01-1.41-3.41M2.458 12C3.732 7.943 7.523 5 12 5c1.357 0 2.653.2 3.895.57M15.364 15.364a6.5 6.5 0 01-8.728-8.728" />
                     </svg>
                   ) : (
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                      <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
                     </svg>
                   )}
                 </button>
               </div>
             </div>
 
-            {/* Submit */}
+            {/* Submit Button */}
             <button
-              id="login-submit"
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white font-semibold transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 hover:-translate-y-0.5"
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
             >
               {loading ? (
-                <span className="flex items-center justify-center gap-2">
+                <>
                   <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
                   Masuk...
-                </span>
+                </>
               ) : (
                 'Masuk'
               )}
             </button>
           </form>
 
-          {/* Quick credentials hint */}
-          <div className="mt-6 p-4 rounded-xl bg-slate-800/40 border border-slate-700/30">
-            <p className="text-xs text-slate-500 font-medium mb-2">💡 Kredensial Demo:</p>
-            <div className="space-y-1">
+          {/* Demo Credentials */}
+          <div className="mt-6 pt-6 border-t border-slate-700/40">
+            <p className="text-xs text-slate-500 font-semibold mb-3">Demo Credentials:</p>
+            <div className="space-y-2">
               {[
                 { email: 'admin@moonlay.com', pass: 'admin123' },
                 { email: 'anisetus@moonlay.com', pass: 'anisetus123' },
@@ -167,18 +170,19 @@ export default function LoginPage() {
                 <button
                   key={cred.email}
                   type="button"
-                  onClick={() => { setEmail(cred.email); setPassword(cred.pass); setError(''); }}
-                  className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-slate-700/50 transition-colors"
+                  onClick={() => setDemoCredentials(cred.email, cred.pass)}
+                  className="w-full text-left px-3 py-2.5 rounded-lg bg-slate-800/30 hover:bg-slate-800/60 border border-slate-700/30 hover:border-slate-600/50 transition-all group"
                 >
-                  <span className="text-xs text-sky-400">{cred.email}</span>
-                  <span className="text-xs text-slate-600 ml-2">/ {cred.pass}</span>
+                  <div className="text-xs text-blue-400 font-medium group-hover:text-blue-300">{cred.email}</div>
+                  <div className="text-xs text-slate-600 group-hover:text-slate-500">Pass: {cred.pass}</div>
                 </button>
               ))}
             </div>
           </div>
         </div>
 
-        <p className="text-center text-xs text-slate-600 mt-6">
+        {/* Footer */}
+        <p className="text-center text-xs text-slate-600 mt-8">
           PT Moonlay Technologies — Technical Test 2026
         </p>
       </div>

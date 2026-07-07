@@ -25,7 +25,6 @@ export default function TasksPage() {
   const [deleting, setDeleting] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
-  // Redirect to login if not authenticated
   useEffect(() => {
     if (!auth.isAuthenticated()) {
       router.push('/login');
@@ -87,7 +86,6 @@ export default function TasksPage() {
     router.push('/login');
   };
 
-  // Filter tasks
   const filteredTasks = tasks
     .filter((t) => filterStatus === 'all' || t.status === filterStatus)
     .filter((t) =>
@@ -96,7 +94,6 @@ export default function TasksPage() {
       t.assignee?.name?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-  // Stats
   const stats = {
     total: tasks.length,
     todo: tasks.filter((t) => t.status === 'todo').length,
@@ -106,47 +103,45 @@ export default function TasksPage() {
 
   return (
     <div className="min-h-screen gradient-bg">
-      {/* Toast notification */}
+      {/* Toast */}
       {toast && (
         <div
-          className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-xl text-sm font-medium shadow-lg animate-in transition-all ${
-            toast.type === 'success'
-              ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400'
-              : 'bg-red-500/20 border border-red-500/40 text-red-400'
-          }`}
+          className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-2xl text-sm font-medium shadow-lg animate-in transition-all ${toast.type === 'success'
+              ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-300'
+              : 'bg-red-500/20 border border-red-500/30 text-red-300'
+            }`}
         >
-          {toast.type === 'success' ? '✅ ' : '❌ '}{toast.message}
+          {toast.message}
         </div>
       )}
 
-      {/* Header / Navbar */}
-      <header className="sticky top-0 z-30 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/80">
+      {/* Header */}
+      <header className="sticky top-0 z-30 glass-card-light backdrop-blur-lg border-b border-slate-700/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-sky-500 to-cyan-600 flex items-center justify-center shadow-lg">
+            <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
               <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
               </svg>
             </div>
             <div>
-              <h1 className="text-base font-bold text-white">Moonlay Task Manager</h1>
+              <h1 className="text-lg font-bold text-white">Moonlay Tasks</h1>
               <p className="text-xs text-slate-500">PT Moonlay Technologies</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             {currentUser && (
-              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700/30">
-                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-sky-500 to-cyan-500 flex items-center justify-center text-white text-xs font-bold">
+              <div className="hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-lg bg-slate-800/40 border border-slate-700/40">
+                <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white text-xs font-bold">
                   {currentUser.name?.charAt(0).toUpperCase()}
                 </div>
-                <span className="text-sm text-slate-300">{currentUser.name}</span>
+                <span className="text-sm text-slate-300 font-medium">{currentUser.name}</span>
               </div>
             )}
             <button
               onClick={handleLogout}
-              id="logout-btn"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 text-sm font-medium transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-red-500/15 hover:bg-red-500/25 border border-red-500/30 text-red-400 hover:text-red-300 text-sm font-semibold transition-all"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -158,105 +153,97 @@ export default function TasksPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats cards */}
+        {/* Stats Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
           {[
-            { label: 'Total Task', value: stats.total, color: 'text-slate-300', bg: 'from-slate-700/30 to-slate-800/30', border: 'border-slate-700/30' },
-            { label: 'Todo', value: stats.todo, color: 'text-amber-400', bg: 'from-amber-500/10 to-amber-600/5', border: 'border-amber-500/20' },
-            { label: 'In Progress', value: stats.inProgress, color: 'text-blue-400', bg: 'from-blue-500/10 to-blue-600/5', border: 'border-blue-500/20' },
-            { label: 'Done', value: stats.done, color: 'text-emerald-400', bg: 'from-emerald-500/10 to-emerald-600/5', border: 'border-emerald-500/20' },
+            { label: 'Total Task', value: stats.total, color: 'text-slate-300', icon: '📋', bg: 'from-slate-600/20 to-slate-700/20' },
+            { label: 'Todo', value: stats.todo, color: 'text-amber-400', icon: '⏳', bg: 'from-amber-500/15 to-amber-600/10' },
+            { label: 'In Progress', value: stats.inProgress, color: 'text-blue-400', icon: '⚡', bg: 'from-blue-500/15 to-blue-600/10' },
+            { label: 'Done', value: stats.done, color: 'text-emerald-400', icon: '✅', bg: 'from-emerald-500/15 to-emerald-600/10' },
           ].map((stat) => (
             <div
               key={stat.label}
-              className={`bg-gradient-to-br ${stat.bg} border ${stat.border} rounded-2xl p-4`}
+              className={`glass-card-light bg-gradient-to-br ${stat.bg} rounded-2xl p-4 border-slate-700/40 hover:border-slate-700/60 transition-all`}
             >
-              <p className="text-xs text-slate-500 mb-1">{stat.label}</p>
-              <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-xs text-slate-500 font-semibold mb-2">{stat.label}</p>
+                  <p className={`text-3xl font-bold ${stat.color}`}>{stat.value}</p>
+                </div>
+                <span className="text-2xl opacity-60">{stat.icon}</span>
+              </div>
             </div>
           ))}
         </div>
 
         {/* Toolbar */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+        <div className="flex flex-col sm:flex-row gap-3 mb-8">
           {/* Search */}
           <div className="relative flex-1">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-              <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
+            <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
             <input
               type="text"
-              id="search-tasks"
               placeholder="Cari task atau assignee..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500/50 focus:ring-1 focus:ring-sky-500/30 transition-all"
+              className="w-full bg-slate-800/40 border border-slate-700/40 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:bg-slate-800/60 focus:ring-1 focus:ring-blue-500/20 transition-all"
             />
           </div>
 
-          {/* Filter */}
-          <div className="flex gap-2">
+          {/* Filter Buttons */}
+          <div className="flex gap-2 flex-wrap">
             {(['all', 'todo', 'in_progress', 'done'] as FilterStatus[]).map((status) => (
               <button
                 key={status}
                 onClick={() => setFilterStatus(status)}
-                className={`px-3 py-2 rounded-xl text-xs font-medium transition-all whitespace-nowrap ${
-                  filterStatus === status
-                    ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20'
-                    : 'bg-slate-800/60 border border-slate-700/50 text-slate-400 hover:text-white hover:bg-slate-700/60'
-                }`}
+                className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${filterStatus === status
+                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30'
+                    : 'bg-slate-800/40 border border-slate-700/40 text-slate-400 hover:text-white hover:bg-slate-800/60 hover:border-slate-600/50'
+                  }`}
               >
-                {status === 'all' ? 'Semua' : status === 'todo' ? '📋 Todo' : status === 'in_progress' ? '⚡ In Progress' : '✅ Done'}
+                {status === 'all' ? 'Semua' : status === 'todo' ? 'Todo' : status === 'in_progress' ? 'In Progress' : 'Done'}
               </button>
             ))}
           </div>
 
-          {/* Add button */}
+          {/* Add Button */}
           <button
-            id="add-task-btn"
             onClick={() => { setEditTask(null); setShowForm(true); }}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white text-sm font-semibold transition-all shadow-lg shadow-sky-500/20 hover:shadow-sky-500/30 whitespace-nowrap"
+            className="flex items-center justify-center sm:justify-start gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white text-sm font-semibold transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 active:scale-95"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
             </svg>
-            Tambah Task
+            <span className="hidden sm:inline">Tambah Task</span>
+            <span className="sm:hidden">Tambah</span>
           </button>
         </div>
 
         {/* Task Grid */}
         {loading ? (
           <div className="flex items-center justify-center py-24">
-            <div className="flex flex-col items-center gap-4">
-              <svg className="w-10 h-10 text-sky-500 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            <div className="flex flex-col items-center gap-4 animate-pulse">
+              <svg className="w-12 h-12 text-blue-500/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
-              <p className="text-slate-400 text-sm">Memuat task...</p>
+              <p className="text-slate-400 text-sm font-medium">Memuat task...</p>
             </div>
           </div>
         ) : filteredTasks.length === 0 ? (
           <div className="text-center py-24">
-            <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-slate-800/60 border border-slate-700/30 mb-4">
+            <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-slate-800/40 border border-slate-700/40 mb-4">
               <svg className="w-8 h-8 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
             </div>
-            <p className="text-slate-400 font-medium mb-1">
-              {searchQuery || filterStatus !== 'all' ? 'Tidak ada task yang cocok' : 'Belum ada task'}
+            <p className="text-slate-300 font-semibold mb-2">
+              {searchQuery || filterStatus !== 'all' ? 'Tidak ada task' : 'Belum ada task'}
             </p>
             <p className="text-slate-600 text-sm mb-6">
-              {searchQuery || filterStatus !== 'all' ? 'Coba ubah filter atau kata kunci pencarian' : 'Klik "Tambah Task" untuk membuat task pertama'}
+              {searchQuery || filterStatus !== 'all' ? 'Ubah filter atau kata kunci pencarian' : 'Buat task pertama Anda sekarang'}
             </p>
-            {!searchQuery && filterStatus === 'all' && (
-              <button
-                onClick={() => { setEditTask(null); setShowForm(true); }}
-                className="px-4 py-2 rounded-xl bg-sky-500/20 border border-sky-500/30 text-sky-400 text-sm font-medium hover:bg-sky-500/30 transition-all"
-              >
-                + Tambah Task Pertama
-              </button>
-            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -285,47 +272,49 @@ export default function TasksPage() {
         />
       )}
 
-      {/* Delete Confirm Dialog */}
+      {/* Delete Confirmation */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setDeleteTarget(null)} />
-          <div className="relative w-full max-w-sm bg-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-2xl">
-            <div className="h-0.5 -mx-6 -mt-6 mb-6 bg-gradient-to-r from-red-500/0 via-red-500 to-red-500/0 rounded-t-2xl" />
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-10 w-10 rounded-xl bg-red-500/20 border border-red-500/30 flex items-center justify-center flex-shrink-0">
-                <svg className="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          <div className="relative w-full max-w-sm glass-card rounded-2xl p-6 shadow-2xl animate-in">
+            <div className="h-0.5 -mx-6 -mt-6 mb-6 bg-gradient-to-r from-transparent via-red-500/50 to-transparent rounded-t-2xl" />
+
+            <div className="flex items-center gap-3 mb-5">
+              <div className="h-10 w-10 rounded-lg bg-red-500/20 border border-red-500/40 flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                 </svg>
               </div>
               <div>
                 <h3 className="font-bold text-white">Hapus Task?</h3>
-                <p className="text-sm text-slate-400">Tindakan ini tidak dapat dibatalkan</p>
+                <p className="text-xs text-slate-400">Tindakan ini tidak dapat dibatalkan</p>
               </div>
             </div>
-            <div className="bg-slate-800/60 rounded-xl p-3 mb-5">
+
+            <div className="bg-slate-800/60 rounded-lg p-3 mb-5 border border-slate-700/40">
               <p className="text-sm text-slate-300 font-medium">&quot;{deleteTarget.title}&quot;</p>
             </div>
+
             <div className="flex gap-3">
               <button
                 onClick={() => setDeleteTarget(null)}
-                className="flex-1 py-2.5 rounded-xl border border-slate-700/50 text-slate-400 hover:text-white hover:bg-slate-800 text-sm font-medium transition-all"
+                className="flex-1 py-2.5 rounded-lg border border-slate-700/40 text-slate-300 hover:text-white hover:bg-slate-800/60 text-sm font-semibold transition-all"
               >
                 Batal
               </button>
               <button
-                id="confirm-delete-btn"
                 onClick={handleDelete}
                 disabled={deleting}
-                className="flex-1 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white text-sm font-semibold transition-all disabled:opacity-50 shadow-lg shadow-red-500/20"
+                className="flex-1 py-2.5 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm font-semibold transition-all disabled:opacity-50 shadow-lg shadow-red-500/20"
               >
-                {deleting ? 'Menghapus...' : 'Ya, Hapus'}
+                {deleting ? 'Menghapus...' : 'Hapus'}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Floating Chatbot Widget */}
+      {/* Floating Chat */}
       <ChatbotWidget />
     </div>
   );

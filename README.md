@@ -15,11 +15,11 @@ UI didesain secara profesional menyesuaikan branding Moonlay (Cyan/Sky Blue & Da
 | **ORM/Query** | GORM (CRUD standar) + Raw SQL via `db.Raw()` (chatbot) |
 | **Database** | PostgreSQL (Docker) |
 | **Auth** | JWT (access token, expiry 24 jam) + bcrypt |
-| **Chatbot** | RAG: PostgreSQL → Custom Prompt → Gemini 1.5 Flash (via REST HTTP) |
+| **Chatbot** | RAG: PostgreSQL → Custom Prompt → Gemini 2.5 Flash (via REST HTTP) |
 
 ---
 
-## 📂 Struktur Folder Utama
+## Struktur Folder Utama
 
 ```
 moonlay-task-management-app/
@@ -47,7 +47,7 @@ moonlay-task-management-app/
 
 ---
 
-## 🚀 Panduan Setup & Instalasi
+## Panduan Setup & Instalasi
 
 ### 1. Prasyarat Sistem
 Pastikan Anda sudah menginstal:
@@ -112,9 +112,9 @@ npm run dev
 
 ---
 
-## 🔑 Kredensial Uji Coba (Login)
+## Kredensial Uji Coba (Login)
 
-Skrip seeder akan secara otomatis membuat 4 user berikut (Password: **nama123**):
+Skrip seeder akan secara otomatis membuat 4 user berikut 
 
 | Nama | Email | Password |
 |---|---|---|
@@ -127,7 +127,7 @@ Skrip seeder akan secara otomatis membuat 4 user berikut (Password: **nama123**)
 
 ---
 
-## 🤖 Integrasi AI Chatbot (RAG)
+## Integrasi AI Chatbot (RAG)
 
 Aplikasi ini memiliki fitur Chatbot untuk memonitor tugas. Fitur ini dibuat tanpa external framework yang berat, murni menggunakan pendekatan **Retrieval-Augmented Generation (RAG)** sederhana di backend:
 
@@ -136,8 +136,8 @@ Aplikasi ini memiliki fitur Chatbot untuk memonitor tugas. Fitur ini dibuat tanp
 2. **Injeksi Prompt**: 
    Data JSON dari database diinjeksikan sebagai *context* ke dalam prompt pengguna.
 3. **Panggilan HTTP REST API ke Gemini**: 
-   Dikarenakan format API key Google terbaru (`AQ.`) saat ini memiliki isu kompatibilitas dengan Google SDK Go yang lama, panggilan AI dilakukan secara manual menggunakan **net/http** ke URL `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`. Key dikirim dengan header `x-goog-api-key`.
-4. **Model Gemini 1.5 Flash**: 
+   Dikarenakan format API key Google terbaru (`AQ.`) saat ini memiliki isu kompatibilitas dengan Google SDK Go yang lama, panggilan AI dilakukan secara manual menggunakan **net/http** ke URL `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`. Key dikirim dengan header `x-goog-api-key`.
+4. **Model Gemini 2.5 Flash**: 
    Digunakan karena cepat, hemat resource, dan memiliki free-tier quota yang tinggi (15 RPM).
 
 **Contoh Pertanyaan Chatbot:**
@@ -163,7 +163,7 @@ Aplikasi ini memiliki fitur Chatbot untuk memonitor tugas. Fitur ini dibuat tanp
 
 ---
 
-## 🚀 Testing API dengan Postman
+## Testing API dengan Postman
 
 Anda dapat menguji seluruh endpoint API menggunakan Postman. Semua request, autentikasi otomatis, dan variabel sudah dikonfigurasi.
 
@@ -177,9 +177,34 @@ Anda dapat menguji seluruh endpoint API menggunakan Postman. Semua request, aute
    > *Setelah login sukses, token JWT akan otomatis tersimpan ke variabel environment `{{token}}`.*
 6. Anda sekarang bisa menjalankan request lain (seperti Get Tasks, Create Task, Chatbot) tanpa perlu memasukkan token secara manual!
 
+> Catatan: untuk kebutuhan pengumpulan technical test, file yang perlu disertakan adalah export Postman dalam format JSON di folder `docs/`. Folder `docs/postman/` hanya berisi source/struktur bantu dari collection dan tidak wajib ikut dikirim jika tidak diminta secara khusus.
+
 ---
 
-## 🎨 UI/UX Design
+## Asumsi
+
+Karena beberapa detail tidak dispesifikasikan secara eksplisit di soal, berikut asumsi yang diambil selama pengerjaan:
+
+- Deadline task menggunakan format datetime (bukan hanya tanggal), agar bisa divalidasi untuk pertanyaan seperti "task yang deadline-nya hari ini" di chatbot.
+- Tidak ada perbedaan role/permission antar user — semua user yang login punya akses yang sama ke seluruh task, tidak dibatasi hanya ke task miliknya sendiri.
+- Field `assignee` wajib diisi saat membuat task baru, tidak boleh kosong.
+- User dibuat lewat seeder (hardcode), tidak ada fitur registrasi mandiri, sesuai instruksi soal.
+- Status task dibatasi ke tiga nilai tetap: `todo`, `in_progress`, `done`.
+- PostgreSQL dijalankan lewat Docker demi kemudahan setup (tidak perlu instalasi native), sedangkan backend dan frontend tetap dijalankan secara native sesuai ketentuan soal.
+- Ditambahkan kolom `created_by` pada tabel `tasks` di luar requirement eksplisit soal, untuk mencatat siapa yang membuat task (audit trail). Field ini bersifat opsional (nullable) dan tidak memengaruhi fungsionalitas inti assignee yang diminta soal.
+
+## Deliverables
+
+Berikut file yang disiapkan agar sesuai dengan requirement technical test:
+
+- `docs/Moonlay_TaskApp.postman_collection.json` dan `docs/Moonlay_TaskApp.postman_environment.json` untuk dokumentasi API di Postman.
+- `docs/ERD.png` untuk diagram ERD.
+- `README.md` ini untuk instruksi setup dan penjelasan fitur, termasuk chatbot.
+- Checklist ringkas status submit ada di [docs/submission-checklist.md](docs/submission-checklist.md).
+
+Jika ingin submission yang lebih rapi, cukup sertakan file JSON export Postman di `docs/` dan ERD image. Folder `docs/postman/` boleh tetap ada di repo sebagai source dokumentasi, tetapi tidak wajib untuk deliverable akhir.
+
+## UI/UX Design
 UI frontend dirancang dengan **Tailwind CSS**, mengadopsi tema **Dark Mode** modern dengan skema warna aksen Cyan/Sky Blue (`#0095c8`) yang selaras dengan identitas **PT Moonlay Technologies**. Terdapat efek *glassmorphism*, gradient atraktif, dan animasi fluid untuk transisi.
 
 ---

@@ -1,9 +1,0 @@
-$kind: collection
-description: |-
-  API collection untuk Task Management App — PT Moonlay Technologies Technical Test.
-
-  Cara pakai:
-  1. Import collection ini ke Postman
-  2. Import environment 'Moonlay Task API Env'
-  3. Jalankan request 'Login' terlebih dahulu — token akan otomatis tersimpan ke variable {{token}}
-  4. Semua endpoint lain langsung bisa dipakai

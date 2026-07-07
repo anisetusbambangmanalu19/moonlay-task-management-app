@@ -18,6 +18,6 @@ response:
     type: text
     content: |-
       {
-        "answer": "Berdasarkan data yang ada, terdapat 3 task yang sudah selesai (status 'done'), yaitu: Setup database, Implementasi login, dan Konfigurasi JWT."
+          "answer": "Berdasarkan data task saat ini, ada **1** task yang sudah selesai (status \"done\"). Task tersebut adalah \"Implementasi Fitur Login\"."
       }
 order: 1000
