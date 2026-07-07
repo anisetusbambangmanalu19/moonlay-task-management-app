@@ -6,7 +6,7 @@ UI didesain secara profesional menyesuaikan branding Moonlay (Cyan/Sky Blue & Da
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Layer | Teknologi |
 |---|---|
@@ -192,17 +192,6 @@ Karena beberapa detail tidak dispesifikasikan secara eksplisit di soal, berikut 
 - Status task dibatasi ke tiga nilai tetap: `todo`, `in_progress`, `done`.
 - PostgreSQL dijalankan lewat Docker demi kemudahan setup (tidak perlu instalasi native), sedangkan backend dan frontend tetap dijalankan secara native sesuai ketentuan soal.
 - Ditambahkan kolom `created_by` pada tabel `tasks` di luar requirement eksplisit soal, untuk mencatat siapa yang membuat task (audit trail). Field ini bersifat opsional (nullable) dan tidak memengaruhi fungsionalitas inti assignee yang diminta soal.
-
-## Deliverables
-
-Berikut file yang disiapkan agar sesuai dengan requirement technical test:
-
-- `docs/Moonlay_TaskApp.postman_collection.json` dan `docs/Moonlay_TaskApp.postman_environment.json` untuk dokumentasi API di Postman.
-- `docs/ERD.png` untuk diagram ERD.
-- `README.md` ini untuk instruksi setup dan penjelasan fitur, termasuk chatbot.
-- Checklist ringkas status submit ada di [docs/submission-checklist.md](docs/submission-checklist.md).
-
-Jika ingin submission yang lebih rapi, cukup sertakan file JSON export Postman di `docs/` dan ERD image. Folder `docs/postman/` boleh tetap ada di repo sebagai source dokumentasi, tetapi tidak wajib untuk deliverable akhir.
 
 ## UI/UX Design
 UI frontend dirancang dengan **Tailwind CSS**, mengadopsi tema **Dark Mode** modern dengan skema warna aksen Cyan/Sky Blue (`#0095c8`) yang selaras dengan identitas **PT Moonlay Technologies**. Terdapat efek *glassmorphism*, gradient atraktif, dan animasi fluid untuk transisi.
