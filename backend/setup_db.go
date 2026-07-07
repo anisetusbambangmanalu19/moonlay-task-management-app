@@ -7,12 +7,12 @@ import (
 	"os"
 	"path/filepath"
 
-	_ "github.com/lib/pq"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
 
 func main() {
-	// Load .env
+	// Muat .env
 	if err := godotenv.Load(); err != nil {
 		log.Println("Warning: Error loading .env file")
 	}
@@ -23,57 +23,57 @@ func main() {
 	password := getEnv("DB_PASSWORD", "postgrespassword")
 	dbname := getEnv("DB_NAME", "moonlay_task_db")
 
-	// 1. Connect to postgres database (default) to create our database
+	// 1. Hubungkan ke database postgres default untuk membuat database kita
 	connStrDefault := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=postgres sslmode=disable",
 		host, port, user, password)
-	
+
 	dbDefault, err := sql.Open("postgres", connStrDefault)
 	if err != nil {
-		log.Fatalf("❌ Failed to connect to default postgres db: %v", err)
+		log.Fatalf("Failed to connect to default postgres db: %v", err)
 	}
 	defer dbDefault.Close()
 
-	// Check if database exists
+	// Cek apakah database sudah ada
 	var exists bool
 	err = dbDefault.QueryRow("SELECT EXISTS(SELECT datname FROM pg_catalog.pg_database WHERE datname = $1)", dbname).Scan(&exists)
 	if err != nil {
-		log.Fatalf("❌ Failed to check if database exists: %v", err)
+		log.Fatalf("Failed to check if database exists: %v", err)
 	}
 
 	if !exists {
 		log.Printf("Creating database %s...", dbname)
 		_, err = dbDefault.Exec(fmt.Sprintf("CREATE DATABASE %s", dbname))
 		if err != nil {
-			log.Fatalf("❌ Failed to create database: %v", err)
+			log.Fatalf("Failed to create database: %v", err)
 		}
-		log.Println("✅ Database created successfully!")
+		log.Println("Database created successfully!")
 	} else {
-		log.Printf("✅ Database %s already exists.", dbname)
+		log.Printf("Database %s already exists.", dbname)
 	}
 
-	// 2. Connect to our new database to run migrations
+	// 2. Hubungkan ke database baru untuk menjalankan migrasi
 	connStrNew := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
-	
+
 	dbNew, err := sql.Open("postgres", connStrNew)
 	if err != nil {
-		log.Fatalf("❌ Failed to connect to new database: %v", err)
+		log.Fatalf("Failed to connect to new database: %v", err)
 	}
 	defer dbNew.Close()
 
-	// 3. Run migration
+	// 3. Jalankan migrasi
 	migrationPath := filepath.Join("migrations", "001_init.sql")
 	migrationData, err := os.ReadFile(migrationPath)
 	if err != nil {
-		log.Fatalf("❌ Failed to read migration file: %v", err)
+		log.Fatalf("Failed to read migration file: %v", err)
 	}
 
 	log.Println("Running migration 001_init.sql...")
 	_, err = dbNew.Exec(string(migrationData))
 	if err != nil {
-		log.Fatalf("❌ Failed to execute migration: %v", err)
+		log.Fatalf("Failed to execute migration: %v", err)
 	}
-	log.Println("✅ Migration executed successfully!")
+	log.Println("Migration executed successfully!")
 }
 
 func getEnv(key, fallback string) string {

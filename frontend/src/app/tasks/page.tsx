@@ -103,7 +103,7 @@ export default function TasksPage() {
 
   return (
     <div className="min-h-screen gradient-bg">
-      {/* Toast */}
+      {/* Notifikasi toast */}
       {toast && (
         <div
           className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-2xl text-sm font-medium shadow-lg animate-in transition-all ${toast.type === 'success'
@@ -153,7 +153,7 @@ export default function TasksPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Cards */}
+        {/* Kartu statistik */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
           {[
             { label: 'Total Task', value: stats.total, color: 'text-slate-300', icon: '📋', bg: 'from-slate-600/20 to-slate-700/20' },
@@ -176,9 +176,9 @@ export default function TasksPage() {
           ))}
         </div>
 
-        {/* Toolbar */}
+        {/* Bilah alat */}
         <div className="flex flex-col sm:flex-row gap-3 mb-8">
-          {/* Search */}
+          {/* Pencarian */}
           <div className="relative flex-1">
             <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -192,7 +192,7 @@ export default function TasksPage() {
             />
           </div>
 
-          {/* Filter Buttons */}
+          {/* Tombol filter */}
           <div className="flex gap-2 flex-wrap">
             {(['all', 'todo', 'in_progress', 'done'] as FilterStatus[]).map((status) => (
               <button
@@ -208,7 +208,7 @@ export default function TasksPage() {
             ))}
           </div>
 
-          {/* Add Button */}
+          {/* Tombol tambah */}
           <button
             onClick={() => { setEditTask(null); setShowForm(true); }}
             className="flex items-center justify-center sm:justify-start gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white text-sm font-semibold transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 active:scale-95"
@@ -221,7 +221,7 @@ export default function TasksPage() {
           </button>
         </div>
 
-        {/* Task Grid */}
+        {/* Grid task */}
         {loading ? (
           <div className="flex items-center justify-center py-24">
             <div className="flex flex-col items-center gap-4 animate-pulse">
@@ -260,7 +260,7 @@ export default function TasksPage() {
         )}
       </main>
 
-      {/* Task Form Modal */}
+      {/* Modal formulir task */}
       {showForm && (
         <TaskForm
           task={editTask}
@@ -272,7 +272,7 @@ export default function TasksPage() {
         />
       )}
 
-      {/* Delete Confirmation */}
+      {/* Konfirmasi hapus */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setDeleteTarget(null)} />
@@ -314,7 +314,7 @@ export default function TasksPage() {
         </div>
       )}
 
-      {/* Floating Chat */}
+      {/* Chat mengambang */}
       <ChatbotWidget />
     </div>
   );

@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// User model - minimal struct just for seeding
+// Model User - struct minimal khusus untuk keperluan seeding
 type User struct {
 	ID           int64     `gorm:"primaryKey;column:id"`
 	Name         string    `gorm:"column:name"`
@@ -23,7 +23,7 @@ type User struct {
 
 func (User) TableName() string { return "users" }
 
-// hashPassword generates a bcrypt hash from plaintext password
+// hashPassword membuat hash bcrypt dari password plaintext
 func hashPassword(password string) string {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -33,7 +33,7 @@ func hashPassword(password string) string {
 }
 
 func main() {
-	// Load .env from backend root (run this from backend/ directory)
+	// Muat .env dari root backend (jalankan dari direktori backend/)
 	if err := godotenv.Load(".env"); err != nil {
 		log.Println("⚠️  Tidak ada file .env, membaca dari environment system")
 	}
@@ -55,8 +55,8 @@ func main() {
 
 	log.Println("✅ Terhubung ke database")
 
-	// Seed users with bcrypt-hashed passwords
-	// Passwords are hashed at runtime — never stored as plaintext
+	// Seed user dengan password yang sudah di-hash bcrypt
+	// Password di-hash saat runtime — tidak pernah disimpan plaintext
 	seedUsers := []struct {
 		Name     string
 		Email    string
@@ -75,7 +75,7 @@ func main() {
 			PasswordHash: hashPassword(su.Password),
 		}
 
-		// Use FirstOrCreate to avoid duplicate insertion on re-run
+		// Gunakan FirstOrCreate agar tidak membuat data ganda saat dijalankan ulang
 		result := db.Where(User{Email: su.Email}).FirstOrCreate(&user)
 		if result.Error != nil {
 			log.Printf("❌ Gagal seed user %s: %v", su.Email, result.Error)

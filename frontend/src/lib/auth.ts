@@ -1,4 +1,4 @@
-// Token storage helpers using localStorage
+// Helper penyimpanan token menggunakan localStorage
 const TOKEN_KEY = 'moonlay_jwt_token';
 const USER_KEY = 'moonlay_user';
 

@@ -13,23 +13,23 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// AuthHandler handles authentication-related HTTP requests
+// AuthHandler menangani permintaan HTTP terkait autentikasi
 type AuthHandler struct {
 	userRepo *repository.UserRepository
 }
 
-// NewAuthHandler creates a new AuthHandler
+// NewAuthHandler membuat AuthHandler baru
 func NewAuthHandler(userRepo *repository.UserRepository) *AuthHandler {
 	return &AuthHandler{userRepo: userRepo}
 }
 
-// LoginRequest defines the expected JSON body for POST /api/auth/login
+// LoginRequest mendefinisikan body JSON yang diharapkan untuk POST /api/auth/login
 type LoginRequest struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required,min=1"`
 }
 
-// Login handles user authentication and returns a JWT token.
+// Login menangani autentikasi user dan mengembalikan token JWT.
 // POST /api/auth/login
 func (h *AuthHandler) Login(c *gin.Context) {
 	var req LoginRequest
@@ -38,27 +38,27 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	// Find user by email
+	// Cari user berdasarkan email
 	user, err := h.userRepo.FindByEmail(req.Email)
 	if err != nil {
-		// Return generic message to avoid email enumeration
+		// Kembalikan pesan umum untuk mencegah enumerasi email
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email atau password salah"})
 		return
 	}
 
-	// Compare provided password with stored bcrypt hash
+	// Bandingkan password yang dikirim dengan hash bcrypt tersimpan
 	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(req.Password)); err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email atau password salah"})
 		return
 	}
 
-	// Determine token expiry from env (default: 24 hours)
+	// Tentukan masa berlaku token dari env (default: 24 jam)
 	expiryHours, _ := strconv.Atoi(os.Getenv("JWT_EXPIRY_HOURS"))
 	if expiryHours <= 0 {
 		expiryHours = 24
 	}
 
-	// Build JWT claims
+	// Susun klaim JWT
 	claims := &middleware.Claims{
 		UserID: user.ID,
 		Email:  user.Email,
@@ -69,7 +69,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		},
 	}
 
-	// Sign token
+	// Tanda tangani token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenStr, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {

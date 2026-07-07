@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Custom scrollbar */
+/* Scrollbar kustom */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -19,19 +19,19 @@
   background: rgba(100, 116, 139, 0.7);
 }
 
-/* Smooth transitions globally */
+/* Transisi halus secara global */
 * {
   transition-property: background-color, border-color, color, fill, stroke, opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
 
-/* Date input dark mode */
+/* Mode gelap untuk input tanggal */
 input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   filter: invert(0.8);
 }
 
-/* Modern gradient background */
+/* Latar belakang gradien modern */
 .gradient-bg {
   background: linear-gradient(135deg, #0f172a 0%, #1a2a4a 50%, #0f172a 100%);
   position: relative;
@@ -46,7 +46,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   pointer-events: none;
 }
 
-/* Glass morphism effect */
+/* Efek glass morphism */
 .glass-card {
   background: rgba(15, 23, 42, 0.7);
   backdrop-filter: blur(20px);
@@ -61,7 +61,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   border: 1px solid rgba(148, 163, 184, 0.15);
 }
 
-/* Animations */
+/* Animasi */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -110,7 +110,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   animation: shimmer 2s ease-in-out infinite;
 }
 
-/* Input styling */
+/* Gaya input */
 input:focus {
   outline: none;
   box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3);

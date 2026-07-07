@@ -7,17 +7,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// UserHandler handles user-related HTTP requests
+// UserHandler menangani permintaan HTTP terkait user
 type UserHandler struct {
 	userRepo *repository.UserRepository
 }
 
-// NewUserHandler creates a new UserHandler
+// NewUserHandler membuat UserHandler baru
 func NewUserHandler(userRepo *repository.UserRepository) *UserHandler {
 	return &UserHandler{userRepo: userRepo}
 }
 
-// GetAll returns a list of all users (for assignee dropdown in frontend).
+// GetAll mengembalikan daftar semua user (untuk dropdown assignee di frontend).
 // GET /api/users
 func (h *UserHandler) GetAll(c *gin.Context) {
 	users, err := h.userRepo.FindAll()

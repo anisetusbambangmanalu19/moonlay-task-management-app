@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Setup registers all routes for the application.
-// Public routes: POST /api/auth/login
-// Protected routes (JWT required): all others
+// Setup mendaftarkan semua rute untuk aplikasi.
+// Rute publik: POST /api/auth/login
+// Rute terlindungi (wajib JWT): sisanya
 func Setup(
 	r *gin.Engine,
 	authHandler *handlers.AuthHandler,
@@ -18,20 +18,20 @@ func Setup(
 ) {
 	api := r.Group("/api")
 
-	// --- Public routes (no auth required) ---
+	// --- Rute publik (tanpa autentikasi) ---
 	auth := api.Group("/auth")
 	{
 		auth.POST("/login", authHandler.Login)
 	}
 
-	// --- Protected routes (JWT required) ---
+	// --- Rute terlindungi (wajib JWT) ---
 	protected := api.Group("")
 	protected.Use(middleware.AuthMiddleware())
 	{
-		// Users
+		// User
 		protected.GET("/users", userHandler.GetAll)
 
-		// Tasks
+		// Task
 		tasks := protected.Group("/tasks")
 		{
 			tasks.GET("", taskHandler.GetAll)

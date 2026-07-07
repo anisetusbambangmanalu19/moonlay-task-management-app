@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { auth } from './auth';
 
-// Axios instance pointing to Go backend
+// Instance Axios yang mengarah ke backend Go
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api',
   headers: { 'Content-Type': 'application/json' },
   timeout: 15000,
 });
 
-// Request interceptor: attach JWT token to every request
+// Interceptor request: tambahkan token JWT ke setiap request
 api.interceptors.request.use(
   (config) => {
     const token = auth.getToken();
@@ -20,7 +20,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor: handle 401 globally (expired/invalid token)
+// Interceptor response: tangani 401 secara global (token kedaluwarsa/tidak valid)
 api.interceptors.response.use(
   (response) => response,
   (error) => {

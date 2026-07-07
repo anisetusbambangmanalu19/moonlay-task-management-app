@@ -11,18 +11,18 @@ import (
 	"gorm.io/gorm"
 )
 
-// TaskHandler handles task-related HTTP requests
+// TaskHandler menangani permintaan HTTP terkait task
 type TaskHandler struct {
 	taskRepo *repository.TaskRepository
 	userRepo *repository.UserRepository
 }
 
-// NewTaskHandler creates a new TaskHandler
+// NewTaskHandler membuat TaskHandler baru
 func NewTaskHandler(taskRepo *repository.TaskRepository, userRepo *repository.UserRepository) *TaskHandler {
 	return &TaskHandler{taskRepo: taskRepo, userRepo: userRepo}
 }
 
-// --- Request structs ---
+// --- Struktur request ---
 
 type CreateTaskRequest struct {
 	Title       string    `json:"title" binding:"required,min=1,max=200"`
@@ -44,9 +44,9 @@ type UpdateStatusRequest struct {
 	Status string `json:"status" binding:"required"`
 }
 
-// --- Handlers ---
+// --- Handler ---
 
-// GetAll returns all tasks with assignee info.
+// GetAll mengembalikan semua task beserta informasi assignee.
 // GET /api/tasks
 func (h *TaskHandler) GetAll(c *gin.Context) {
 	tasks, err := h.taskRepo.FindAll()
@@ -57,7 +57,7 @@ func (h *TaskHandler) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": tasks})
 }
 
-// GetByID returns a single task by ID.
+// GetByID mengembalikan satu task berdasarkan ID.
 // GET /api/tasks/:id
 func (h *TaskHandler) GetByID(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
@@ -79,7 +79,7 @@ func (h *TaskHandler) GetByID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": task})
 }
 
-// Create creates a new task.
+// Create membuat task baru.
 // POST /api/tasks
 func (h *TaskHandler) Create(c *gin.Context) {
 	var req CreateTaskRequest
@@ -88,13 +88,13 @@ func (h *TaskHandler) Create(c *gin.Context) {
 		return
 	}
 
-	// Validate assignee exists
+	// Validasi bahwa assignee ada
 	if _, err := h.userRepo.FindByID(req.AssigneeID); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Assignee tidak ditemukan"})
 		return
 	}
 
-	// Set default status and validate
+	// Tetapkan status default dan lakukan validasi
 	status := models.TaskStatus(req.Status)
 	if req.Status == "" {
 		status = models.TaskStatusTodo
@@ -104,7 +104,7 @@ func (h *TaskHandler) Create(c *gin.Context) {
 		return
 	}
 
-	// Get current user from JWT context
+	// Ambil user saat ini dari context JWT
 	userID := c.GetInt64("user_id")
 
 	task := &models.Task{
@@ -121,7 +121,7 @@ func (h *TaskHandler) Create(c *gin.Context) {
 		return
 	}
 
-	// Reload with associations for response
+	// Muat ulang beserta relasinya untuk respons
 	created, _ := h.taskRepo.FindByID(task.ID)
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "Task berhasil dibuat",
@@ -129,7 +129,7 @@ func (h *TaskHandler) Create(c *gin.Context) {
 	})
 }
 
-// Update updates all fields of a task.
+// Update memperbarui semua field task.
 // PUT /api/tasks/:id
 func (h *TaskHandler) Update(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
@@ -154,14 +154,14 @@ func (h *TaskHandler) Update(c *gin.Context) {
 		return
 	}
 
-	// Validate status
+	// Validasi status
 	status := models.TaskStatus(req.Status)
 	if !status.IsValid() {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Status tidak valid. Pilihan: todo, in_progress, done"})
 		return
 	}
 
-	// Validate assignee
+	// Validasi assignee
 	if _, err := h.userRepo.FindByID(req.AssigneeID); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Assignee tidak ditemukan"})
 		return
@@ -172,7 +172,7 @@ func (h *TaskHandler) Update(c *gin.Context) {
 	task.Status = status
 	task.Deadline = req.Deadline
 	task.AssigneeID = req.AssigneeID
-	task.Assignee = nil // clear to prevent GORM association update issues
+	task.Assignee = nil // kosongkan untuk mencegah masalah update relasi GORM
 	task.Creator = nil
 
 	if err := h.taskRepo.Update(task); err != nil {
@@ -187,7 +187,7 @@ func (h *TaskHandler) Update(c *gin.Context) {
 	})
 }
 
-// UpdateStatus updates only the status of a task.
+// UpdateStatus hanya memperbarui status task.
 // PATCH /api/tasks/:id/status
 func (h *TaskHandler) UpdateStatus(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
@@ -220,7 +220,7 @@ func (h *TaskHandler) UpdateStatus(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Status berhasil diupdate"})
 }
 
-// Delete removes a task by ID.
+// Delete menghapus task berdasarkan ID.
 // DELETE /api/tasks/:id
 func (h *TaskHandler) Delete(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
@@ -229,7 +229,7 @@ func (h *TaskHandler) Delete(c *gin.Context) {
 		return
 	}
 
-	// Check task exists first
+	// Cek apakah task sudah ada terlebih dahulu
 	if _, err := h.taskRepo.FindByID(id); err != nil {
 		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Task tidak ditemukan"})

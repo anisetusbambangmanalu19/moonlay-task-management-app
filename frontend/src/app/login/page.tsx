@@ -46,7 +46,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen gradient-bg flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated background elements */}
+      {/* Elemen latar belakang animasi */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
         <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl" />
@@ -64,12 +64,12 @@ export default function LoginPage() {
           <p className="text-slate-400 text-sm">Kelola task tim Anda dengan efisien</p>
         </div>
 
-        {/* Login Card */}
+        {/* Kartu login */}
         <div className="glass-card rounded-3xl p-8 shadow-2xl animate-in" style={{ animationDelay: '0.1s' }}>
-          {/* Gradient divider */}
+          {/* Pembatas gradien */}
           <div className="h-0.5 -mx-8 -mt-8 mb-8 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-3xl" />
 
-          {/* Error Message */}
+          {/* Pesan error */}
           {error && (
             <div className="mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-start gap-3 animate-in">
               <svg className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -79,9 +79,9 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Form */}
+          {/* Formulir */}
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email Input */}
+            {/* Input email */}
             <div>
               <label className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">
                 Email
@@ -101,7 +101,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Password Input */}
+            {/* Input password */}
             <div>
               <label className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">
                 Password
@@ -139,7 +139,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Submit Button */}
+            {/* Tombol kirim */}
             <button
               type="submit"
               disabled={loading}
@@ -159,7 +159,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Demo Credentials */}
+          {/* Kredensial demo */}
           <div className="mt-6 pt-6 border-t border-slate-700/40">
             <p className="text-xs text-slate-500 font-semibold mb-3">Demo Credentials:</p>
             <div className="space-y-2">

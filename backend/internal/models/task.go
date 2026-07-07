@@ -11,13 +11,13 @@ const (
 	TaskStatusDone       TaskStatus = "done"
 )
 
-// IsValid checks if the TaskStatus value is one of the allowed values
+// IsValid mengecek apakah nilai TaskStatus termasuk nilai yang diizinkan
 func (s TaskStatus) IsValid() bool {
 	return s == TaskStatusTodo || s == TaskStatusInProgress || s == TaskStatusDone
 }
 
-// Task represents a task in the system.
-// Uses PostgreSQL ENUM type for status field.
+// Task merepresentasikan sebuah task di sistem.
+// Menggunakan tipe ENUM PostgreSQL untuk field status.
 type Task struct {
 	ID          int64      `gorm:"primaryKey;column:id" json:"id"`
 	Title       string     `gorm:"size:200;not null;column:title" json:"title"`
@@ -29,7 +29,7 @@ type Task struct {
 	CreatedAt   time.Time  `gorm:"column:created_at" json:"created_at"`
 	UpdatedAt   time.Time  `gorm:"column:updated_at" json:"updated_at"`
 
-	// Associations (populated via Preload)
+	// Relasi (diisi lewat Preload)
 	Assignee *User `gorm:"foreignKey:AssigneeID" json:"assignee,omitempty"`
 	Creator  *User `gorm:"foreignKey:CreatedBy" json:"creator,omitempty"`
 }

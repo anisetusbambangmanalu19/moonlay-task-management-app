@@ -78,7 +78,7 @@ export default function TaskForm({ task, onClose, onSuccess }: TaskFormProps) {
   };
 
   return (
-    /* Backdrop */
+    /* Latar belakang */
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
@@ -87,7 +87,7 @@ export default function TaskForm({ task, onClose, onSuccess }: TaskFormProps) {
 
       {/* Modal */}
       <div className="relative w-full max-w-lg bg-slate-900 border border-slate-700/50 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden">
-        {/* Header gradient */}
+        {/* Gradien header */}
         <div className="h-1 bg-gradient-to-r from-sky-500 via-cyan-500 to-cyan-500" />
 
         <div className="p-6">
@@ -112,7 +112,7 @@ export default function TaskForm({ task, onClose, onSuccess }: TaskFormProps) {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Title */}
+            {/* Judul */}
             <div>
               <label className="block text-xs font-medium text-slate-400 mb-1.5">
                 Judul Task <span className="text-red-400">*</span>
@@ -127,7 +127,7 @@ export default function TaskForm({ task, onClose, onSuccess }: TaskFormProps) {
               />
             </div>
 
-            {/* Description */}
+            {/* Deskripsi */}
             <div>
               <label className="block text-xs font-medium text-slate-400 mb-1.5">
                 Deskripsi
@@ -142,7 +142,7 @@ export default function TaskForm({ task, onClose, onSuccess }: TaskFormProps) {
               />
             </div>
 
-            {/* Status & Deadline row */}
+            {/* Baris status dan tenggat waktu */}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-medium text-slate-400 mb-1.5">
@@ -194,7 +194,7 @@ export default function TaskForm({ task, onClose, onSuccess }: TaskFormProps) {
               </select>
             </div>
 
-            {/* Actions */}
+            {/* Aksi */}
             <div className="flex gap-3 pt-2">
               <button
                 type="button"

@@ -7,8 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
-// TaskContext is a flat struct used specifically for the chatbot RAG context query.
-// Uses raw SQL — not GORM model — to allow flexible joins and filtering.
+// TaskContext adalah struct datar yang dipakai khusus untuk query konteks RAG chatbot.
+// Menggunakan raw SQL — bukan model GORM — agar join dan filtering lebih fleksibel.
 type TaskContext struct {
 	ID           int64     `json:"id"`
 	Title        string    `json:"title"`
@@ -19,24 +19,24 @@ type TaskContext struct {
 	CreatedAt    time.Time `json:"created_at"`
 }
 
-// TaskRepository handles all database operations for the Task model
+// TaskRepository menangani semua operasi database untuk model Task
 type TaskRepository struct {
 	db *gorm.DB
 }
 
-// NewTaskRepository creates a new TaskRepository instance
+// NewTaskRepository membuat instance TaskRepository baru
 func NewTaskRepository(db *gorm.DB) *TaskRepository {
 	return &TaskRepository{db: db}
 }
 
-// FindAll retrieves all tasks with their assignee info (via Preload)
+// FindAll mengambil semua task beserta informasi assignee-nya (via Preload)
 func (r *TaskRepository) FindAll() ([]models.Task, error) {
 	var tasks []models.Task
 	result := r.db.Preload("Assignee").Order("created_at DESC").Find(&tasks)
 	return tasks, result.Error
 }
 
-// FindByID retrieves a single task by ID with all associations
+// FindByID mengambil satu task berdasarkan ID beserta semua relasinya
 func (r *TaskRepository) FindByID(id int64) (*models.Task, error) {
 	var task models.Task
 	result := r.db.Preload("Assignee").Preload("Creator").First(&task, id)
@@ -46,14 +46,14 @@ func (r *TaskRepository) FindByID(id int64) (*models.Task, error) {
 	return &task, nil
 }
 
-// Create inserts a new task into the database
+// Create menyimpan task baru ke database
 func (r *TaskRepository) Create(task *models.Task) error {
 	return r.db.Create(task).Error
 }
 
-// Update saves all fields of an existing task
+// Update menyimpan semua field dari task yang sudah ada
 func (r *TaskRepository) Update(task *models.Task) error {
-	// Use Updates to avoid overwriting zero-value fields accidentally
+	// Gunakan Updates agar field bernilai nol tidak tertimpa secara tidak sengaja
 	return r.db.Model(task).Updates(map[string]interface{}{
 		"title":       task.Title,
 		"description": task.Description,
@@ -63,7 +63,7 @@ func (r *TaskRepository) Update(task *models.Task) error {
 	}).Error
 }
 
-// UpdateStatus updates only the status field of a task (for PATCH endpoint)
+// UpdateStatus hanya memperbarui field status dari task (untuk endpoint PATCH)
 func (r *TaskRepository) UpdateStatus(id int64, status models.TaskStatus) error {
 	result := r.db.Model(&models.Task{}).Where("id = ?", id).Update("status", status)
 	if result.Error != nil {
@@ -75,7 +75,7 @@ func (r *TaskRepository) UpdateStatus(id int64, status models.TaskStatus) error 
 	return nil
 }
 
-// Delete soft-deletes a task by ID
+// Delete menghapus task berdasarkan ID
 func (r *TaskRepository) Delete(id int64) error {
 	result := r.db.Delete(&models.Task{}, id)
 	if result.Error != nil {
@@ -87,12 +87,12 @@ func (r *TaskRepository) Delete(id int64) error {
 	return nil
 }
 
-// GetTasksForChatbot uses raw SQL to fetch all task data for the chatbot RAG context.
-// Raw SQL is intentionally used here (as per spec) instead of GORM for flexibility.
+	// GetTasksForChatbot memakai raw SQL untuk mengambil seluruh data task bagi konteks RAG chatbot.
+	// Raw SQL sengaja dipakai di sini (sesuai spesifikasi), bukan GORM, agar lebih fleksibel.
 func (r *TaskRepository) GetTasksForChatbot() ([]TaskContext, error) {
 	var tasks []TaskContext
 
-	// Raw SQL join — returns flat context data for the LLM prompt
+	// Join raw SQL — mengembalikan data konteks datar untuk prompt LLM
 	result := r.db.Raw(`
 		SELECT 
 			t.id,

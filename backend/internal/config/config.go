@@ -11,17 +11,17 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-// DB is the global database instance
+// DB adalah instance database global
 var DB *gorm.DB
 
-// LoadEnv loads environment variables from .env file
+// LoadEnv memuat variabel lingkungan dari file .env
 func LoadEnv() {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found, reading from system environment variables")
 	}
 }
 
-// ConnectDB establishes a connection to PostgreSQL using GORM
+// ConnectDB membuat koneksi ke PostgreSQL menggunakan GORM
 func ConnectDB() {
 	dsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s TimeZone=Asia/Jakarta",
@@ -40,7 +40,7 @@ func ConnectDB() {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
-	// Test connection
+	// Uji koneksi
 	sqlDB, err := db.DB()
 	if err != nil {
 		log.Fatalf("Failed to get underlying sql.DB: %v", err)
@@ -53,12 +53,12 @@ func ConnectDB() {
 	DB = db
 }
 
-// GetDB returns the global database instance
+// GetDB mengembalikan instance database global
 func GetDB() *gorm.DB {
 	return DB
 }
 
-// getEnv returns the value of an environment variable or a fallback default
+// getEnv mengembalikan nilai variabel lingkungan atau nilai default cadangan
 func getEnv(key, fallback string) string {
 	if value := os.Getenv(key); value != "" {
 		return value

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-// Root page redirects to /tasks (which will redirect to /login if not authenticated)
+// Halaman root mengarahkan ke /tasks (yang akan mengarahkan ke /login jika belum autentikasi)
 export default function Home() {
   redirect('/tasks');
 }

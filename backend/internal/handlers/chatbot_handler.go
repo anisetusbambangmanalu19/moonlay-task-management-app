@@ -16,22 +16,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ChatbotHandler handles RAG-based chatbot requests
+// ChatbotHandler menangani permintaan chatbot berbasis RAG
 type ChatbotHandler struct {
 	taskRepo *repository.TaskRepository
 }
 
-// NewChatbotHandler creates a new ChatbotHandler
+// NewChatbotHandler membuat ChatbotHandler baru
 func NewChatbotHandler(taskRepo *repository.TaskRepository) *ChatbotHandler {
 	return &ChatbotHandler{taskRepo: taskRepo}
 }
 
-// ChatRequest defines the expected JSON body for POST /api/chatbot
+// ChatRequest mendefinisikan body JSON yang diharapkan untuk POST /api/chatbot
 type ChatRequest struct {
 	Question string `json:"question" binding:"required,min=1"`
 }
 
-// Gemini REST API request/response structs
+// Struktur request/response REST API Gemini
 type geminiRequest struct {
 	Contents []geminiContent `json:"contents"`
 }
@@ -55,7 +55,7 @@ type geminiResponse struct {
 	} `json:"error"`
 }
 
-// geminiAPIError wraps the HTTP status code so callers can decide whether to retry.
+// geminiAPIError membungkus status HTTP agar pemanggil bisa menentukan apakah perlu retry.
 type geminiAPIError struct {
 	StatusCode int
 	Message    string
@@ -65,20 +65,20 @@ func (e *geminiAPIError) Error() string {
 	return fmt.Sprintf("Gemini API error %d: %s", e.StatusCode, e.Message)
 }
 
-// isRetryable reports whether an error is transient and worth retrying
-// (overload / rate limit), as opposed to a permanent error (bad request, auth, etc).
+// isRetryable menilai apakah error bersifat sementara dan layak dicoba ulang
+// (kelebihan beban / batas laju), bukan error permanen (bad request, auth, dll).
 func isRetryable(err error) bool {
 	apiErr, ok := err.(*geminiAPIError)
 	if !ok {
 		return false
 	}
-	return apiErr.StatusCode == http.StatusServiceUnavailable || // 503, model overloaded
-		apiErr.StatusCode == http.StatusTooManyRequests || // 429, rate limited
-		apiErr.StatusCode >= 500 // any other transient server-side error
+	return apiErr.StatusCode == http.StatusServiceUnavailable || // 503, model kelebihan beban
+		apiErr.StatusCode == http.StatusTooManyRequests || // 429, kena batas laju
+		apiErr.StatusCode >= 500 // error server sementara lainnya
 }
 
-// Chat handles the chatbot request using RAG (Retrieval-Augmented Generation).
-// Flow: user question -> query DB for task context -> build prompt -> Gemini API -> return answer
+// Chat menangani permintaan chatbot menggunakan RAG (Retrieval-Augmented Generation).
+// Alur: pertanyaan user -> query DB untuk konteks task -> susun prompt -> Gemini API -> kembalikan jawaban
 // POST /api/chatbot
 func (h *ChatbotHandler) Chat(c *gin.Context) {
 	var req ChatRequest
@@ -87,7 +87,7 @@ func (h *ChatbotHandler) Chat(c *gin.Context) {
 		return
 	}
 
-	// --- STEP 1: Retrieve task context from database (RAG retrieval step) ---
+	// --- LANGKAH 1: Ambil konteks task dari database (langkah retrieval RAG) ---
 	tasks, err := h.taskRepo.GetTasksForChatbot()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengambil data task untuk chatbot"})
@@ -99,14 +99,14 @@ func (h *ChatbotHandler) Chat(c *gin.Context) {
 		return
 	}
 
-	// --- STEP 2: Serialize task context to JSON ---
+	// --- LANGKAH 2: Serialisasikan konteks task ke JSON ---
 	tasksJSON, err := json.MarshalIndent(tasks, "", "  ")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal memproses data task"})
 		return
 	}
 
-	// --- STEP 3: Build RAG prompt ---
+	// --- LANGKAH 3: Susun prompt RAG ---
 	prompt := fmt.Sprintf(`Kamu adalah asisten manajemen task (chatbot) yang cerdas dan ramah di aplikasi Moonlay Task Management.
 Tugas utamamu adalah membantu pengguna mengelola, memantau, dan menjawab pertanyaan terkait data task mereka.
 
@@ -127,7 +127,7 @@ Pertanyaan pengguna: %s
 
 Jawabanmu:`, string(tasksJSON), req.Question)
 
-	// --- STEP 4: Call Gemini REST API directly, with retry on transient errors ---
+	// --- LANGKAH 4: Panggil REST API Gemini secara langsung, dengan retry untuk error sementara ---
 	apiKey := os.Getenv("GEMINI_API_KEY")
 	if apiKey == "" {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Konfigurasi API chatbot tidak lengkap. Periksa GEMINI_API_KEY di .env"})
@@ -150,9 +150,9 @@ Jawabanmu:`, string(tasksJSON), req.Question)
 	c.JSON(http.StatusOK, gin.H{"answer": answer})
 }
 
-// callGeminiAPIWithRetry wraps callGeminiAPI with retry + exponential backoff,
-// but only retries on transient errors (503 overload, 429 rate limit, 5xx).
-// Permanent errors (bad request, invalid key, etc) fail immediately.
+// callGeminiAPIWithRetry membungkus callGeminiAPI dengan retry + exponential backoff,
+// tetapi hanya untuk error sementara (503 overload, 429 rate limit, 5xx).
+// Error permanen (bad request, invalid key, dll) langsung gagal.
 func callGeminiAPIWithRetry(ctx context.Context, apiKey, prompt string, maxAttempts int) (string, error) {
 	var lastErr error
 
@@ -168,13 +168,13 @@ func callGeminiAPIWithRetry(ctx context.Context, apiKey, prompt string, maxAttem
 			return "", err
 		}
 
-		// Exponential backoff with jitter: ~1s, ~2s, ~4s + random 0-300ms
+		// Exponential backoff dengan jitter: ~1s, ~2s, ~4s + acak 0-300ms
 		backoff := time.Duration(1<<uint(attempt-1))*time.Second + time.Duration(rand.Intn(300))*time.Millisecond
 		log.Printf("Gemini API attempt %d/%d failed (%v), retrying in %v", attempt, maxAttempts, err, backoff)
 
 		select {
 		case <-time.After(backoff):
-			// continue to next attempt
+			// lanjut ke percobaan berikutnya
 		case <-ctx.Done():
 			return "", ctx.Err()
 		}
@@ -183,14 +183,14 @@ func callGeminiAPIWithRetry(ctx context.Context, apiKey, prompt string, maxAttem
 	return "", lastErr
 }
 
-// callGeminiAPI calls the Gemini API via direct HTTP REST (no SDK needed).
-// Auth is sent via the x-goog-api-key header, which works for all standard
-// Gemini API keys (format: "AIza...", generated at aistudio.google.com).
+// callGeminiAPI memanggil Gemini API lewat HTTP REST langsung (tanpa SDK).
+// Autentikasi dikirim lewat header x-goog-api-key, yang cocok untuk semua
+// Gemini API key standar (format: "AIza...", dibuat di aistudio.google.com).
 func callGeminiAPI(ctx context.Context, apiKey, prompt string) (string, error) {
 	const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
 
-	// Give each individual attempt its own timeout so one slow call
-	// doesn't block the whole request indefinitely.
+	// Beri setiap percobaan timeout sendiri agar satu panggilan lambat
+	// tidak memblokir seluruh request tanpa batas.
 	reqCtx, cancel := context.WithTimeout(ctx, 20*time.Second)
 	defer cancel()
 
@@ -228,8 +228,8 @@ func callGeminiAPI(ctx context.Context, apiKey, prompt string) (string, error) {
 		return "", fmt.Errorf("failed to parse Gemini response: %w", err)
 	}
 
-	// Prefer the structured error from Gemini's JSON body when present,
-	// otherwise fall back to the HTTP status code.
+	// Utamakan error terstruktur dari body JSON Gemini jika ada,
+	// lalu jatuhkan ke status code HTTP jika tidak ada.
 	if geminiResp.Error != nil {
 		return "", &geminiAPIError{StatusCode: geminiResp.Error.Code, Message: geminiResp.Error.Message}
 	}

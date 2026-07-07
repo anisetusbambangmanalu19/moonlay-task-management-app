@@ -13,27 +13,27 @@ import (
 )
 
 func main() {
-	// Load environment variables from .env file
+	// Muat variabel lingkungan dari file .env
 	config.LoadEnv()
 
-	// Connect to PostgreSQL database
+	// Hubungkan ke database PostgreSQL
 	config.ConnectDB()
 	db := config.GetDB()
 
-	// Initialize repositories (query layer)
+	// Inisialisasi repository (lapisan query)
 	userRepo := repository.NewUserRepository(db)
 	taskRepo := repository.NewTaskRepository(db)
 
-	// Initialize handlers (HTTP layer)
+	// Inisialisasi handler (lapisan HTTP)
 	authHandler := handlers.NewAuthHandler(userRepo)
 	userHandler := handlers.NewUserHandler(userRepo)
 	taskHandler := handlers.NewTaskHandler(taskRepo, userRepo)
 	chatbotHandler := handlers.NewChatbotHandler(taskRepo)
 
-	// Setup Gin router
+	// Siapkan router Gin
 	r := gin.Default()
 
-	// CORS middleware — allow frontend (Next.js on :3000) to communicate with backend
+	// Middleware CORS untuk mengizinkan frontend (Next.js di :3000) berkomunikasi dengan backend
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
@@ -42,10 +42,10 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	// Register all application routes
+	// Daftarkan semua rute aplikasi
 	routes.Setup(r, authHandler, userHandler, taskHandler, chatbotHandler)
 
-	// Start server
+	// Jalankan server
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
