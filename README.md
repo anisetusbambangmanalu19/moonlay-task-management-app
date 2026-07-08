@@ -85,6 +85,8 @@ DB_SSLMODE=disable
 GEMINI_API_KEY=AQ.Ab8RN6KL6Hc4ppmBXNIs...
 ```
 
+> Catatan: `GEMINI_API_KEY` disimpan di file `backend/.env` secara lokal saja. Jangan commit isi `.env` ke GitHub. File `backend/.env.example` dipakai sebagai template tanpa key asli.
+
 3. Jalankan Seeder untuk mengisi data awal:
 ```bash
 go run migrations/seed/main.go
@@ -145,6 +147,14 @@ Aplikasi ini memiliki fitur Chatbot untuk memonitor tugas. Fitur ini dibuat tanp
 - *"Tampilkan semua task yang statusnya belum dikerjakan"*
 - *"Tugas apa saja yang deadlinenya paling dekat?"*
 - *"Siapa assignee dari task [judul task]?"*
+
+### Cara Menjalankan Fitur Chatbot
+
+1. Pastikan backend sudah aktif dan file `backend/.env` sudah berisi `GEMINI_API_KEY` yang valid dari Google AI Studio.
+2. Buka aplikasi, login, lalu masuk ke halaman task.
+3. Klik ikon chatbot di pojok kanan bawah.
+4. Ajukan pertanyaan seputar task, misalnya jumlah task, status task, deadline, atau assignee.
+5. Jika key belum diisi atau salah, backend akan mengembalikan error konfigurasi chatbot.
 
 ---
 

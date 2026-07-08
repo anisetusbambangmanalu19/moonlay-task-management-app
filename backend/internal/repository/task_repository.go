@@ -87,8 +87,8 @@ func (r *TaskRepository) Delete(id int64) error {
 	return nil
 }
 
-	// GetTasksForChatbot memakai raw SQL untuk mengambil seluruh data task bagi konteks RAG chatbot.
-	// Raw SQL sengaja dipakai di sini (sesuai spesifikasi), bukan GORM, agar lebih fleksibel.
+// GetTasksForChatbot memakai raw SQL untuk mengambil seluruh data task bagi konteks RAG chatbot.
+// Raw SQL sengaja dipakai di sini (sesuai spesifikasi), bukan GORM, agar lebih fleksibel.
 func (r *TaskRepository) GetTasksForChatbot() ([]TaskContext, error) {
 	var tasks []TaskContext
 

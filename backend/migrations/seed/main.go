@@ -27,7 +27,7 @@ func (User) TableName() string { return "users" }
 func hashPassword(password string) string {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		log.Fatalf("❌ Gagal hash password: %v", err)
+		log.Fatalf("Gagal hash password: %v", err)
 	}
 	return string(hash)
 }
@@ -35,7 +35,7 @@ func hashPassword(password string) string {
 func main() {
 	// Muat .env dari root backend (jalankan dari direktori backend/)
 	if err := godotenv.Load(".env"); err != nil {
-		log.Println("⚠️  Tidak ada file .env, membaca dari environment system")
+		log.Println("Tidak ada file .env, membaca dari environment system")
 	}
 
 	dsn := fmt.Sprintf(
@@ -50,10 +50,10 @@ func main() {
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("❌ Gagal koneksi database: %v", err)
+		log.Fatalf("Gagal koneksi database: %v", err)
 	}
 
-	log.Println("✅ Terhubung ke database")
+	log.Println("Terhubung ke database")
 
 	// Seed user dengan password yang sudah di-hash bcrypt
 	// Password di-hash saat runtime — tidak pernah disimpan plaintext
@@ -78,15 +78,15 @@ func main() {
 		// Gunakan FirstOrCreate agar tidak membuat data ganda saat dijalankan ulang
 		result := db.Where(User{Email: su.Email}).FirstOrCreate(&user)
 		if result.Error != nil {
-			log.Printf("❌ Gagal seed user %s: %v", su.Email, result.Error)
+			log.Printf("Gagal seed user %s: %v", su.Email, result.Error)
 		} else if result.RowsAffected > 0 {
-			log.Printf("✅ User dibuat: %s (%s)", su.Name, su.Email)
+			log.Printf("User dibuat: %s (%s)", su.Name, su.Email)
 		} else {
-			log.Printf("⚠️  User sudah ada (skip): %s (%s)", su.Name, su.Email)
+			log.Printf("User sudah ada (skip): %s (%s)", su.Name, su.Email)
 		}
 	}
 
-	log.Println("\n🎉 Seed selesai!")
+	log.Println("\nSeed selesai!")
 	log.Println("Kredensial login yang tersedia:")
 	log.Println("  admin@moonlay.com    / admin123")
 	log.Println("  anisetus@moonlay.com / anisetus123")

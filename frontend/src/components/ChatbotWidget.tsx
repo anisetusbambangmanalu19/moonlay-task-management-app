@@ -4,12 +4,109 @@ import { useState, useRef, useEffect } from 'react';
 import { ChatMessage } from '@/types';
 import api from '@/lib/api';
 
+type RenderBlock =
+  | { type: 'paragraph'; content: string }
+  | { type: 'list'; ordered: boolean; items: string[] }
+
+function buildChatBlocks(content: string): RenderBlock[] {
+  const lines = content.replace(/\r\n/g, '\n').split('\n');
+  const blocks: RenderBlock[] = [];
+  let paragraphBuffer: string[] = [];
+  let currentList: { ordered: boolean; items: string[] } | null = null;
+
+  const flushParagraph = () => {
+    const text = paragraphBuffer.join(' ').trim();
+    if (text) {
+      blocks.push({ type: 'paragraph', content: text });
+    }
+    paragraphBuffer = [];
+  };
+
+  const flushList = () => {
+    if (currentList && currentList.items.length > 0) {
+      blocks.push({ type: 'list', ordered: currentList.ordered, items: currentList.items });
+    }
+    currentList = null;
+  };
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+
+    if (!line) {
+      flushParagraph();
+      flushList();
+      continue;
+    }
+
+    const bulletMatch = line.match(/^[-*•]\s+(.*)$/);
+    const orderedMatch = line.match(/^\d+[.)]\s+(.*)$/);
+
+    if (bulletMatch || orderedMatch) {
+      flushParagraph();
+
+      const ordered = !!orderedMatch;
+      const text = (bulletMatch?.[1] ?? orderedMatch?.[1] ?? '').trim();
+
+      if (!currentList || currentList.ordered !== ordered) {
+        flushList();
+        currentList = { ordered, items: [] };
+      }
+
+      currentList.items.push(text);
+      continue;
+    }
+
+    flushList();
+    paragraphBuffer.push(line);
+  }
+
+  flushParagraph();
+  flushList();
+
+  return blocks;
+}
+
+function renderChatContent(content: string) {
+  const blocks = buildChatBlocks(content);
+
+  return (
+    <div className="space-y-3">
+      {blocks.map((block, index) => {
+        if (block.type === 'paragraph') {
+          return (
+            <p key={index} className="leading-relaxed whitespace-pre-line">
+              {block.content}
+            </p>
+          );
+        }
+
+        const ListTag = block.ordered ? 'ol' : 'ul';
+
+        return (
+          <ListTag
+            key={index}
+            className={`space-y-2 rounded-xl border border-slate-700/40 bg-slate-950/30 px-3 py-2.5 ${
+              block.ordered ? 'list-decimal' : 'list-disc'
+            } list-outside pl-5`}
+          >
+            {block.items.map((item, itemIndex) => (
+              <li key={itemIndex} className="leading-relaxed text-slate-100">
+                {item}
+              </li>
+            ))}
+          </ListTag>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'bot',
-      content: 'Halo! Saya asisten task management. Tanya saya apa saja seputar task yang ada, misalnya:\n• "Berapa task yang belum selesai?"\n• "Siapa assignee task X?"\n• "Task apa saja yang deadlinenya hari ini?"',
+      content: 'Tanyakan saja soal task. Contoh: "berapa task yang ada", "siapa assignee task X", atau "task apa yang belum selesai".',
       timestamp: new Date(),
     },
   ]);
@@ -102,7 +199,7 @@ export default function ChatbotWidget() {
                       : 'bg-slate-800/80 text-slate-200 rounded-bl-sm border border-slate-700/30'
                   }`}
                 >
-                  {msg.content}
+                  {msg.role === 'user' ? msg.content : renderChatContent(msg.content)}
                 </div>
               </div>
             ))}

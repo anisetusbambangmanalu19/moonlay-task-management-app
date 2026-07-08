@@ -49,7 +49,7 @@ func ConnectDB() {
 		log.Fatalf("Failed to ping database: %v", err)
 	}
 
-	log.Println("✅ Database connected successfully")
+	log.Println("Database connected successfully")
 	DB = db
 }
 

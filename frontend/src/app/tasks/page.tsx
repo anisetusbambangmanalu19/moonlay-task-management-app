@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Task, TaskStatus, User } from '@/types';
 import api from '@/lib/api';
@@ -15,7 +15,7 @@ export default function TasksPage() {
   const router = useRouter();
 
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser] = useState<User | null>(() => auth.getUser());
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editTask, setEditTask] = useState<Task | null>(null);
@@ -28,31 +28,39 @@ export default function TasksPage() {
   useEffect(() => {
     if (!auth.isAuthenticated()) {
       router.push('/login');
-      return;
     }
-    const user = auth.getUser();
-    setCurrentUser(user as User);
   }, [router]);
-
-  const fetchTasks = useCallback(async () => {
-    try {
-      const res = await api.get('/tasks');
-      setTasks(res.data.data ?? []);
-    } catch {
-      showToast('Gagal memuat task', 'error');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (auth.isAuthenticated()) fetchTasks();
-  }, [fetchTasks]);
 
   const showToast = (message: string, type: 'success' | 'error') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
   };
+
+  useEffect(() => {
+    if (!auth.isAuthenticated()) return;
+
+    let cancelled = false;
+
+    const loadTasks = async () => {
+    try {
+      const res = await api.get('/tasks');
+      if (cancelled) return;
+      setTasks(res.data.data ?? []);
+    } catch {
+      if (cancelled) return;
+      showToast('Gagal memuat task', 'error');
+    } finally {
+      if (cancelled) return;
+      setLoading(false);
+    }
+    };
+
+    void loadTasks();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
 
   const handleStatusChange = async (taskId: number, status: TaskStatus) => {
     try {
@@ -266,7 +274,14 @@ export default function TasksPage() {
           task={editTask}
           onClose={() => { setShowForm(false); setEditTask(null); }}
           onSuccess={() => {
-            fetchTasks();
+              void (async () => {
+                try {
+                  const res = await api.get('/tasks');
+                  setTasks(res.data.data ?? []);
+                } catch {
+                  showToast('Gagal memuat task', 'error');
+                }
+              })();
             showToast(editTask ? 'Task berhasil diperbarui' : 'Task berhasil dibuat', 'success');
           }}
         />
